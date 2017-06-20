@@ -35,14 +35,14 @@ Custom property | Description | Default
   <template>
     <style include="px-datetime-range-panel-styles"></style>
 
-    <div id="rangepickerModal" class="rangepicker__box inline--flex flex--col">
+    <div id="rangepickerModal" class="rangepicker__box shadow-temporary inline--flex flex--col u-p+">
       <!-- Calendar + time inputs + presets -->
       <div class="flex">
         <!-- Calendars + time inputs -->
-        <div class="flex--item flex--column">
+        <div class="flex__item flex--column">
           <!-- the two calendars -->
           <div class="flex flex--center">
-            <div class="flex--item rangepicker__box__calendar">
+            <div class="flex__item rangepicker__box__calendar u-mr+">
               <px-calendar-picker
                 id="from"
                 hide-next-button="{{_areConsecutiveMonth(fromBaseDate, toBaseDate)}}"
@@ -57,10 +57,8 @@ Custom property | Description | Default
               </px-calendar-picker>
             </div>
             <template is="dom-if" if="{{!_areConsecutiveMonth(fromBaseDate, toBaseDate)}}">
-              <div id="monthDivider" class="verticalDivider flex--item">
-              </div>
             </template>
-            <div class="flex--item rangepicker__box__calendar">
+            <div class="flex__item rangepicker__box__calendar">
               <px-calendar-picker
                 id="to"
                 hide-previous-button="{{_areConsecutiveMonth(fromBaseDate, toBaseDate)}}"
@@ -77,11 +75,10 @@ Custom property | Description | Default
           </div>
           <!-- The two time inputs -->
           <template is="dom-if" if="{{!hideTime}}">
-            <div class="horizontalDivider"></div>
-            <div class="flex flex--center u-m">
+            <div class="flex flex--center u-mb+++">
               <px-datetime-field
                 id="time"
-                class="flex__item--middle u-mr- box__time"
+                class="flex__item--middle box__time"
                 moment-obj="{{fromMoment}}"
                 hide-icon
                 hide-date
@@ -92,10 +89,9 @@ Custom property | Description | Default
                 language="[[language]]"
                 formats="[[formats]]">
               </px-datetime-field>
-              <div class="flex__item--middle largeFont box__dash">–</div>
               <px-datetime-field
                 id="time"
-                class="flex__item--middle u-ml- box__time"
+                class="flex__item--middle box__time"
                 moment-obj="{{toMoment}}"
                 hide-icon
                 hide-date
@@ -113,7 +109,7 @@ Custom property | Description | Default
         <template is="dom-if" if="{{!hidePresets}}">
           <px-datetime-presets
             id="presets"
-            class="flex flex--col border--left u-p+"
+            class="flex flex--col u-ml+++ u-mr-"
             preset-ranges="{{presetRanges}}"
             resources="[[resources]]"
             language="[[language]]"
@@ -122,8 +118,7 @@ Custom property | Description | Default
         </template>
       </div>
       <template is="dom-if" if="{{showButtons}}">
-        <div class="horizontalDivider"></div>
-        <div class="flex flex--row--rev u-m-">
+        <div class="flex flex--row--rev">
           <px-datetime-buttons
             class="flex__item--bottom"
             is-submit-button-valid="[[_canApply]]"

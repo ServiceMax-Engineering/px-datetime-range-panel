@@ -1,3 +1,8 @@
+v1.0.0
+==================
+* update dependencies for design refresh
+* component redesign
+
 v0.5.0
 ==================
 * added localization through resources, language, formats and Px.moment.changeLocale()
