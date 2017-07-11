@@ -29,7 +29,7 @@
     "polymer": "^1.9.0",
     "px-calendar-picker": "^1.0.0",
     "px-datetime-common": "^1.0.0",
-    "px-datetime-field": "^0.7.0"
+    "px-datetime-field": "^1.0.0"
   },
   "devDependencies": {
     "px-theme": "^3.0.0",

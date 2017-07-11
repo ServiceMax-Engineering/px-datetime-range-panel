@@ -10,18 +10,20 @@
 <!--
 The datetime components rely on <a href="https://momentjs.com/" target="_blank">Moment.js</a> and <a href="https://momentjs.com/timezone/" target="_blank">Moment Timezone</a>.
 
-#### Usage
+### Usage
 
-    <px-datetime-range-panel from={{...}} to={{...}}>
+    <px-datetime-range-panel
+      from={{...}}
+      to={{...}}>
     </px-datetime-range-panel>
 
-#### Styling
+### Styling
 The following custom properties are available for styling. Please also refer to px-forms-design, px-calendar-picker, px-datetime-field, and px-datetime-common for additional style variables used by this component.
 
-Custom property | Description | Default
-----------------|-------------|----------
-`--px-range-panel-border-color` | Border color used within the datetime range panel | `$gray4`
-`--px-range-panel-background-color` | Background color for the datetime range panel | `$white`
+Custom property | Description
+:----------------|:-------------
+`--px-range-panel-border-color` | Border color used within the datetime range panel
+`--px-range-panel-background-color` | Background color for the datetime range panel
 
 @element px-datetime-range-panel
 @blurb Element providing solution to date time range panel.
@@ -35,14 +37,11 @@ Custom property | Description | Default
   <template>
     <style include="px-datetime-range-panel-styles"></style>
 
-    <div id="rangepickerModal" class="rangepicker__box shadow-temporary inline--flex flex--col u-p+">
-      <!-- Calendar + time inputs + presets -->
+    <div id="rangepickerModal" class="rangepicker__box shadow-temporary u-p+">
       <div class="flex">
-        <!-- Calendars + time inputs -->
-        <div class="flex__item flex--column">
-          <!-- the two calendars -->
+        <div>
           <div class="flex flex--center">
-            <div class="flex__item rangepicker__box__calendar u-mr+">
+            <div class="u-mr+">
               <px-calendar-picker
                 id="from"
                 hide-next-button="{{_areConsecutiveMonth(fromBaseDate, toBaseDate)}}"
@@ -56,9 +55,7 @@ Custom property | Description | Default
                 formats="[[formats]]">
               </px-calendar-picker>
             </div>
-            <template is="dom-if" if="{{!_areConsecutiveMonth(fromBaseDate, toBaseDate)}}">
-            </template>
-            <div class="flex__item rangepicker__box__calendar">
+            <div>
               <px-calendar-picker
                 id="to"
                 hide-previous-button="{{_areConsecutiveMonth(fromBaseDate, toBaseDate)}}"
@@ -73,7 +70,6 @@ Custom property | Description | Default
               </px-calendar-picker>
             </div>
           </div>
-          <!-- The two time inputs -->
           <template is="dom-if" if="{{!hideTime}}">
             <div class="flex flex--center u-mb+++">
               <px-datetime-field
@@ -105,7 +101,6 @@ Custom property | Description | Default
             </div>
           </template>
         </div>
-        <!-- the presets -->
         <template is="dom-if" if="{{!hidePresets}}">
           <px-datetime-presets
             id="presets"
@@ -120,7 +115,6 @@ Custom property | Description | Default
       <template is="dom-if" if="{{showButtons}}">
         <div class="flex flex--row--rev">
           <px-datetime-buttons
-            class="flex__item--bottom"
             is-submit-button-valid="[[_canApply]]"
             resources="[[resources]]"
             language="[[language]]"
