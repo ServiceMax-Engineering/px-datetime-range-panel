@@ -1,15 +1,16 @@
-Px-Datetime-Range-Panel [![Build Status](https://travis-ci.org/PredixDev/px-datetime-range-panel.svg?branch=master)](https://travis-ci.org/PredixDev/px-datetime-range-panel)
------------------------------------------------
-
-
-[![px-datetime-range-panel demo](px-datetime-range-panel.png?raw=true)](https://github.com/PredixDev/px-datetime-range-panel)
-
+# px-datetime-range-panel [![Build Status](https://travis-ci.org/PredixDev/px-datetime-range-panel.svg?branch=master)](https://travis-ci.org/PredixDev/px-datetime-range-panel)
 
 ## Overview
 
-px-datetime-range-panel is a Predix UI component
+The px-datetime-range-panel component presents a date and time selection interface for the user. Its main use is in px-rangepicker.
 
-## Getting Started
+
+## Documentation
+
+Read the full API and view the demo [here](https://predixdev.github.io/px-datetime-range-panel).
+
+
+## Local Development
 
 Read https://github.com/pages/PX/technical-principles/
 
