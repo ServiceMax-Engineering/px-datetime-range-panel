@@ -25,18 +25,26 @@ function runCustomTests() {
       assert.equal(rangePanel.toBaseDate.diff(rangePanel.fromBaseDate, 'month'), 1);
     });
 
-    test('divider not shown when month consecutive', function() {
-      var divider = Polymer.dom(rangePanel.root).querySelector('#monthDivider');
-      assert.isTrue(divider === null || divider.style.display === 'none');
+    test('middle arrows not shown when month consecutive', function() {
+      var fromCalendar = Polymer.dom(rangePanel.root).querySelector('#from');
+      var toCalendar = Polymer.dom(rangePanel.root).querySelector('#to');
+      assert.isFalse(fromCalendar.hidePreviousButton);
+      assert.isTrue(fromCalendar.hideNextButton);
+      assert.isTrue(toCalendar.hidePreviousButton);
+      assert.isFalse(toCalendar.hideNextButton);
     });
 
-    test('divider shown when month not consecutive', function(done) {
+    test('all arrows shown when month not consecutive', function(done) {
 
       rangePanel.toBaseDate = rangePanel._convertISOtoMoment("2016-08-11T22:00:00Z");
 
       flush(function() {
-        var divider = Polymer.dom(rangePanel.root).querySelector('#monthDivider');
-        assert.isNotNull(divider);
+        var fromCalendar = Polymer.dom(rangePanel.root).querySelector('#from');
+        var toCalendar = Polymer.dom(rangePanel.root).querySelector('#to');
+        assert.isFalse(fromCalendar.hidePreviousButton);
+        assert.isFalse(fromCalendar.hideNextButton);
+        assert.isFalse(toCalendar.hidePreviousButton);
+        assert.isFalse(toCalendar.hideNextButton);
         done();
       });
     });
