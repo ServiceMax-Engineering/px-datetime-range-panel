@@ -1,10 +1,10 @@
 <link rel="import" href="../polymer/polymer.html"/>
-<link rel="import" href="../px-calendar-picker/px-calendar-picker.html"/>
 <link rel="import" href="../px-datetime-common/px-datetime-presets.html"/>
 <link rel="import" href="../px-datetime-common/px-datetime-buttons.html"/>
 <link rel="import" href="../px-datetime-common/px-datetime-button-behavior.html"/>
-<link rel="import" href="../px-datetime-field/px-datetime-field.html"/>
 <link rel="import" href="../px-datetime-common/px-datetime-range-behavior.html"/>
+<link rel="import" href="../px-datetime-field/px-datetime-field.html"/>
+<link rel="import" href="../px-calendar-picker/px-calendar-picker.html"/>
 <link rel="import" href="../app-localize-behavior/app-localize-behavior.html" />
 
 <!--
@@ -24,6 +24,7 @@ Custom property | Description
 :----------------|:-------------
 `--px-range-panel-border-color` | Border color used within the datetime range panel
 `--px-range-panel-background-color` | Background color for the datetime range panel
+`--px-range-panel-z-index` | The z-index for the datetime range panel
 
 @element px-datetime-range-panel
 @blurb Element providing solution to date time range panel.
@@ -37,7 +38,7 @@ Custom property | Description
   <template>
     <style include="px-datetime-range-panel-styles"></style>
 
-    <div id="rangepickerModal" class="rangepicker__box shadow-temporary u-p+">
+    <div id="rangepickerModal" class="rangepicker__box shadow-temporary">
       <div class="flex">
         <div>
           <div class="flex flex--center">
@@ -71,10 +72,10 @@ Custom property | Description
             </div>
           </div>
           <template is="dom-if" if="{{!hideTime}}">
-            <div class="flex flex--center u-mb+++">
+            <div class="flex flex--center u-mt+ u-mb+++">
               <px-datetime-field
                 id="time"
-                class="flex__item--middle box__time"
+                class="flex__item--middle box__time u-mr+"
                 moment-obj="{{fromMoment}}"
                 hide-icon
                 hide-date
