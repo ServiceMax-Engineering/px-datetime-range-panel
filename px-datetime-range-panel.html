@@ -41,7 +41,7 @@ Custom property | Description
     <div id="rangepickerModal" class="rangepicker__box shadow-temporary">
       <div class="flex">
         <div>
-          <div class="flex flex--center">
+          <div class="flex">
             <div class="u-mr+">
               <px-calendar-picker
                 id="from"
@@ -55,6 +55,23 @@ Custom property | Description
                 language="[[language]]"
                 formats="[[formats]]">
               </px-calendar-picker>
+              <template is="dom-if" if="{{!hideTime}}">
+                <div class="flex flex--center u-mt+">
+                  <px-datetime-field
+                    id="time"
+                    class="box__time"
+                    moment-obj="{{toMoment}}"
+                    hide-icon
+                    hide-date
+                    is-valid="{{_toTimeIsValid}}"
+                    time-format="{{timeFormat}}"
+                    time-zone="[[timeZone]]"
+                    resources="[[resources]]"
+                    language="[[language]]"
+                    formats="[[formats]]">
+                  </px-datetime-field>
+                </div>
+              </template>
             </div>
             <div>
               <px-calendar-picker
@@ -69,38 +86,25 @@ Custom property | Description
                 language="[[language]]"
                 formats="[[formats]]">
               </px-calendar-picker>
+              <template is="dom-if" if="{{!hideTime}}">
+                <div class$="flex flex--center u-mt+ {{_getFieldClass(showButtons)}}">
+                  <px-datetime-field
+                    id="time"
+                    class="box__time"
+                    moment-obj="{{toMoment}}"
+                    hide-icon
+                    hide-date
+                    is-valid="{{_toTimeIsValid}}"
+                    time-format="{{timeFormat}}"
+                    time-zone="[[timeZone]]"
+                    resources="[[resources]]"
+                    language="[[language]]"
+                    formats="[[formats]]">
+                  </px-datetime-field>
+                </div>
+          </template>
             </div>
           </div>
-          <template is="dom-if" if="{{!hideTime}}">
-            <div class="flex flex--center u-mt+ u-mb+++">
-              <px-datetime-field
-                id="time"
-                class="flex__item--middle box__time u-mr+"
-                moment-obj="{{fromMoment}}"
-                hide-icon
-                hide-date
-                is-valid="{{_fromTimeIsValid}}"
-                time-format="{{timeFormat}}"
-                time-zone="[[timeZone]]"
-                resources="[[resources]]"
-                language="[[language]]"
-                formats="[[formats]]">
-              </px-datetime-field>
-              <px-datetime-field
-                id="time"
-                class="flex__item--middle box__time"
-                moment-obj="{{toMoment}}"
-                hide-icon
-                hide-date
-                is-valid="{{_toTimeIsValid}}"
-                time-format="{{timeFormat}}"
-                time-zone="[[timeZone]]"
-                resources="[[resources]]"
-                language="[[language]]"
-                formats="[[formats]]">
-              </px-datetime-field>
-            </div>
-          </template>
         </div>
         <template is="dom-if" if="{{!hidePresets}}">
           <px-datetime-presets
@@ -114,7 +118,7 @@ Custom property | Description
         </template>
       </div>
       <template is="dom-if" if="{{showButtons}}">
-        <div class="flex flex--row--rev">
+        <div class="flex flex--row--rev u-mt+++">
           <px-datetime-buttons
             is-submit-button-valid="[[_canApply]]"
             resources="[[resources]]"
@@ -519,6 +523,13 @@ Custom property | Description
 
     _getTimeIsValid: function(_fromTimeIsValid, _toTimeIsValid, hideTime) {
       return hideTime || (_fromTimeIsValid && _toTimeIsValid);
+    },
+
+    _getFieldClass: function(showButtons){
+      if(!showButtons){
+        return "u-mb+";
+      }
     }
+
   });
 </script>
