@@ -29,7 +29,7 @@
   position: absolute;
   padding: calculateRem(10px) calculateRem(20px) calculateRem(20px) calculateRem(20px);
   border: 1px solid;
-  z-index: var(--px-range-panel-z-index, 300);
+  z-index: var(--px-range-panel-z-index, 30);
   border-color: var(--px-range-panel-border-color, lightgray);
   background-color: var(--px-range-panel-background-color, white);
 }
