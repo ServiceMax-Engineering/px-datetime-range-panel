@@ -7,6 +7,8 @@
  * with the terms and conditions stipulated in the agreement/contract
  * under which the software has been supplied.
  */
+//Tools
+@import "px-mixins-design/_tools.mixins.scss";
 
 // Generic
 @import "px-normalize-design/_generic.normalize.scss";
@@ -19,43 +21,37 @@
 @import "px-shadows-design/_objects.shadows.scss";
 
 // Component
-:host {
-  text-align: left;
-}
 :host[hidden] {
   visibility: hidden;
 }
-.btn--bare{
-  &:hover, &:focus {
-    outline: none;
-  }
-}
+
 .rangepicker__box {
   position: absolute;
+  padding: calculateRem(10px) calculateRem(20px) calculateRem(20px) calculateRem(20px);
   border: 1px solid;
-  z-index:2;
+  z-index: var(--px-range-panel-z-index, 30);
   border-color: var(--px-range-panel-border-color, lightgray);
   background-color: var(--px-range-panel-background-color, white);
 }
+
 .box__time {
-  --px-datetime-entry-font-size: xx-large;
+  --px-datetime-entry-font-size: 30px;
+  --px-datetime-field-height: calculateRem(40px);
+  --px-btn-height: 1em;
+  --px-datetime-icon-size: calculateRem(30px);
+  --px-dropdown-icon-size: calculateRem(30px);
+  --px-dropdown-content-font-size: 15px;
 }
-.largeFont {
-  font-size: xx-large;
-}
-.u-ml\00002b\00002b\00002b {
+
+.u-ml\00002b\00002b\00002b { ///u-ml+++
   margin-left: calculateRem(40px) !important;
 }
-.u-mb\00002b\00002b\00002b {
-  margin-bottom: calculateRem(40px) !important;
+
+.u-mt\00002b\00002b\00002b { //u-mt+++
+  margin-top: calculateRem(40px) !important;
 }
 
 // Trumps
 $inuit-enable-margins--small      : true;
-$inuit-enable-margins--none       : true;
 $inuit-enable-margins--large      : true;
-$inuit-enable-margins             : true;
-$inuit-enable-paddings--small     : true;
-$inuit-enable-paddings--large     : true;
-$inuit-enable-paddings            : true;
 @import "px-spacing-design/_trumps.spacing.scss";

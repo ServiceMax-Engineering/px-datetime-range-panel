@@ -1,6 +1,5 @@
 <!-- Common imports -->
 <link rel="import" href="../../polymer/polymer.html" />
-<link rel="import" href="../../px-polymer-font-awesome/polymer-font-awesome.html" />
 
 <!-- Common demo imports -->
 <link rel="import" href="../../px-demo/px-demo-header.html" />
@@ -38,16 +37,18 @@
 
       <!-- Component ---------------------------------------------------------->
       <px-demo-component>
-        <px-datetime-range-panel
-            style="position: relative;"
-            time-format="{{props.timeFormat.value}}"
-            show-buttons="{{props.showButtons.value}}"
-            block-future-dates="{{props.blockFutureDates.value}}"
-            block-past-dates="{{props.blockPastDates.value}}"
-            hide-time="{{props.hideTime.value}}"
-            time-zone="{{props.timeZone.value}}"
-            hide-presets="{{props.hidePresets.value}}">
-        </px-datetime-range-panel>
+        <div style="height: 430px; width: 630px;">
+          <px-datetime-range-panel
+              style="position: relative;"
+              time-format="{{props.timeFormat.value}}"
+              show-buttons="{{props.showButtons.value}}"
+              block-future-dates="{{props.blockFutureDates.value}}"
+              block-past-dates="{{props.blockPastDates.value}}"
+              hide-time="{{props.hideTime.value}}"
+              time-zone="{{props.timeZone.value}}"
+              hide-presets="{{props.hidePresets.value}}">
+          </px-datetime-range-panel>
+        </div>
       </px-demo-component>
       <!-- END Component ------------------------------------------------------>
 
