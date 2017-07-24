@@ -2,6 +2,7 @@ v1.0.0
 ==================
 * update dependencies for design refresh
 * component redesign
+* Allow presets for time not just date
 
 v0.5.0
 ==================
