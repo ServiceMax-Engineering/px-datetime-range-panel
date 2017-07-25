@@ -2,7 +2,7 @@
 
 ## Overview
 
-The px-datetime-range-panel component presents a date and time selection interface for the user. Its main use is in px-rangepicker.
+`Px-datetime-range-panel` is a Predix UI component which provides an interface for selecting date/time values. Its primary use is within the px-rangepicker.
 
 
 ## Documentation
