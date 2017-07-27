@@ -504,6 +504,7 @@ Custom property | Description
 
         this.$.from.fromMoment = this.fromMoment;
         this.$.to.fromMoment = this.fromMoment;
+        this.set('fromBaseDate', this.fromMoment);
       }
     },
     _toMomentChanged: function() {
@@ -512,6 +513,7 @@ Custom property | Description
 
         this.$.from.toMoment = this.toMoment;
         this.$.to.toMoment = this.toMoment;
+        this.set('toBaseDate', this.toMoment);
       }
     },
 
