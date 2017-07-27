@@ -1,3 +1,7 @@
+v1.0.1
+==================
+* shows selected months on load
+
 v1.0.0
 ==================
 * update dependencies for design refresh
