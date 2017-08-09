@@ -281,6 +281,9 @@ Custom property | Description
       '_fromMomentChanged(fromMoment)',
       '_toMomentChanged(toMoment)'
     ],
+    listeners: {
+      'px-datetime-button-clicked': '_handleButtonClick'
+    },
     ready: function() {
 
       var fromHandler = this._fromPicked.bind(this),
@@ -530,6 +533,16 @@ Custom property | Description
     _getFieldClass: function(showButtons){
       if(!showButtons){
         return "u-mb+";
+      }
+    },
+
+    /**
+     * when the cancel button is clicked and presets are showing, reset the presets
+     */
+    _handleButtonClick: function(evt){
+      if(this.hidePresets === false && evt.detail.action === false){
+        var presets = Polymer.dom(this.root).querySelector('px-datetime-presets');
+        presets.selectedItem = {};
       }
     }
 

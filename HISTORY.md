@@ -1,3 +1,7 @@
+v1.0.3
+==================
+* presets now deselect when cancel is clicked
+
 v1.0.2
 ==================
 * runtime theming for demo
