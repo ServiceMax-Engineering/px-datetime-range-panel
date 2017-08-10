@@ -5,7 +5,8 @@
 <link rel="import" href="../px-datetime-common/px-datetime-range-behavior.html"/>
 <link rel="import" href="../px-datetime-field/px-datetime-field.html"/>
 <link rel="import" href="../px-calendar-picker/px-calendar-picker.html"/>
-<link rel="import" href="../app-localize-behavior/app-localize-behavior.html" />
+<link rel="import" href="../app-localize-behavior/app-localize-behavior.html"/>
+<link rel="import" href="css/px-datetime-range-panel-styles.html"/>
 
 <!--
 The datetime components rely on <a href="https://momentjs.com/" target="_blank">Moment.js</a> and <a href="https://momentjs.com/timezone/" target="_blank">Moment Timezone</a>.
@@ -17,7 +18,9 @@ The datetime components rely on <a href="https://momentjs.com/" target="_blank">
       to={{...}}>
     </px-datetime-range-panel>
 
+
 ### Styling
+
 The following custom properties are available for styling. Please also refer to px-forms-design, px-calendar-picker, px-datetime-field, and px-datetime-common for additional style variables used by this component.
 
 Custom property | Description
@@ -29,11 +32,8 @@ Custom property | Description
 @element px-datetime-range-panel
 @blurb Element providing solution to date time range panel.
 @homepage index.html
-@demo demo.html
+@demo index.html
 -->
-
-<link rel="import" href="css/px-datetime-range-panel-styles.html">
-
 <dom-module id="px-datetime-range-panel">
   <template>
     <style include="px-datetime-range-panel-styles"></style>
