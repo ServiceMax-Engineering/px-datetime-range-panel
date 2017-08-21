@@ -9,6 +9,7 @@
 <link rel="import" href="../../px-demo/px-demo-props.html" />
 <link rel="import" href="../../px-demo/px-demo-interactive.html" />
 <link rel="import" href="../../px-demo/px-demo-component-snippet.html" />
+<link rel="import" href="../../px-demo/px-demo-code-editor.html" />
 
 <!-- Imports for this component -->
 <link rel="import" href="../../px-demo/css/px-demo-styles.html" />
@@ -35,6 +36,8 @@
       <!-- Props -->
       <px-demo-props props="{{props}}" config="[[chosenConfig]]" class="flex__item flex__item--msfix"></px-demo-props>
 
+      <px-demo-code-editor props="{{props}}" config="[[chosenConfig]]"></px-demo-code-editor>
+
       <!-- Component ---------------------------------------------------------->
       <px-demo-component>
         <div style="height: 430px; width: 630px;">
@@ -46,7 +49,9 @@
               block-past-dates="{{props.blockPastDates.value}}"
               hide-time="{{props.hideTime.value}}"
               time-zone="{{props.timeZone.value}}"
-              hide-presets="{{props.hidePresets.value}}">
+              hide-presets="{{props.hidePresets.value}}"
+              min="{{props.min.value}}"
+              max="{{props.max.value}}">
           </px-datetime-range-panel>
         </div>
       </px-demo-component>
@@ -122,7 +127,9 @@
               blockPastDates: false,
               hideTime: false,
               timeZone: "UTC",
-              hidePresets: false
+              hidePresets: false,
+              min: "{}",
+              max: "{}"
             },
 
             { configName: "Only calendar",
@@ -132,7 +139,9 @@
               blockPastDates: false,
               hideTime: true,
               timeZone: "America/Los_Angeles",
-              hidePresets: true
+              hidePresets: true,
+              min: "{}",
+              max: "{}"
             }
           ]
         }
@@ -188,6 +197,18 @@
         inputType: 'typeahead',
         inputPlaceholder: 'UTC'
       },
+
+      min: {
+        type: Object,
+        defaultValue: Px.moment().subtract(7, 'day'),
+        inputType: 'code:JSON'
+      },
+
+      max: {
+        type: Object,
+        defaultValue: Px.moment().add(7, 'day'),
+        inputType: 'code:JSON'
+      }
 
     },
 

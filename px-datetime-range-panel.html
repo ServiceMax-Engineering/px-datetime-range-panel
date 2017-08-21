@@ -53,7 +53,9 @@ Custom property | Description
                 day-week-start-index="[[dayWeekStartIndex]]"
                 resources="[[resources]]"
                 language="[[language]]"
-                formats="[[formats]]">
+                formats="[[formats]]"
+                min="[[min]]"
+                max="[[max]]">
               </px-calendar-picker>
               <template is="dom-if" if="{{!hideTime}}">
                 <div class="flex flex--center u-mt+">
@@ -68,7 +70,9 @@ Custom property | Description
                     time-zone="[[timeZone]]"
                     resources="[[resources]]"
                     language="[[language]]"
-                    formats="[[formats]]">
+                    formats="[[formats]]"
+                    min="[[min]]"
+                    max="[[max]]">
                   </px-datetime-field>
                 </div>
               </template>
@@ -84,7 +88,9 @@ Custom property | Description
                 day-week-start-index="[[dayWeekStartIndex]]"
                 resources="[[resources]]"
                 language="[[language]]"
-                formats="[[formats]]">
+                formats="[[formats]]"
+                min="[[min]]"
+                max="[[max]]">
               </px-calendar-picker>
               <template is="dom-if" if="{{!hideTime}}">
                 <div class$="flex flex--center u-mt+ {{_getFieldClass(showButtons)}}">
@@ -99,7 +105,9 @@ Custom property | Description
                     time-zone="[[timeZone]]"
                     resources="[[resources]]"
                     language="[[language]]"
-                    formats="[[formats]]">
+                    formats="[[formats]]"
+                    min="[[min]]"
+                    max="[[max]]">
                   </px-datetime-field>
                 </div>
           </template>
