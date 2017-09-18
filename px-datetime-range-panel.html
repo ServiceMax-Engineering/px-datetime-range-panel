@@ -318,8 +318,18 @@ Custom property | Description
     },
 
     _presetSelected: function(e) {
-      var start = Px.moment.tz(e.detail.startDateTime, this.timeZone),
-          end = Px.moment.tz(e.detail.endDateTime, this.timeZone);
+      var start= {}, end= {};
+      if(typeof e.detail.startDateTime === "function") {
+        start = Px.moment.tz(e.detail.startDateTime(), this.timeZone);
+      } else {
+        start = Px.moment.tz(e.detail.startDateTime, this.timeZone);
+      }
+
+      if (typeof e.detail.endDateTime === "function"){
+        end = Px.moment.tz(e.detail.endDateTime(), this.timeZone);
+      } else {
+        end = Px.moment.tz(e.detail.endDateTime, this.timeZone);
+      }
 
       this._internalSet = true;
 
