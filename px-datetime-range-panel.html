@@ -212,6 +212,11 @@ Custom property | Description
        *      "displayText": "Last 12 Hours",
        *      "startDateTime": "2013-02-04T10:44:30.652Z",
        *      "endDateTime": "2013-02-04T22:49:30.652Z"
+       *    },
+       *    {
+       *      "displayText": "Last 12 Hours",
+       *      "startDateTime": function() {return moment().subtract(1, 'days').toISOString();},
+       *      "endDateTime": function() {return moment().startOf('day').toISOString();}
        *    }
        *   ]
        * ```

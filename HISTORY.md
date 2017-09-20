@@ -1,3 +1,7 @@
+v1.0.7
+==================
+* Updated presets documentation
+
 v1.0.6
 ==================
 * Allow presets to be functions
