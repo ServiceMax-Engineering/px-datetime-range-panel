@@ -1,6 +1,6 @@
 {
   "name": "px-datetime-range-panel",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "main": [
     "px-datetime-range-panel.html"
   ],
