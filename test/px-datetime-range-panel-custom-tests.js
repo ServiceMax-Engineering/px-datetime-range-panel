@@ -7,8 +7,8 @@ suite('Calendars base dates', function() {
     fromCal = Polymer.dom(rangePanel.root).querySelectorAll('px-calendar-picker')[0],
     toCal = Polymer.dom(rangePanel.root).querySelectorAll('px-calendar-picker')[1];
 
-    rangePanel.fromBaseDate = rangePanel._convertISOtoMoment("2016-06-01T20:00:00Z");
-    rangePanel.toBaseDate = rangePanel._convertISOtoMoment("2016-07-11T22:00:00Z");
+    rangePanel.fromBaseDate = Px.moment("2016-06-01T20:00:00Z");
+    rangePanel.toBaseDate = Px.moment("2016-07-11T22:00:00Z");
 
     flush(function() {
       done();
@@ -30,7 +30,7 @@ suite('Calendars base dates', function() {
 
   test('all arrows shown when month not consecutive', function(done) {
 
-    rangePanel.toBaseDate = rangePanel._convertISOtoMoment("2016-08-11T22:00:00Z");
+    rangePanel.toBaseDate = Px.moment("2016-08-11T22:00:00Z");
 
     flush(function() {
       var fromCalendar = Polymer.dom(rangePanel.root).querySelector('#from');
@@ -45,7 +45,7 @@ suite('Calendars base dates', function() {
 
   test('"to" calendar cant be same as "from" calendar', function(done) {
 
-    rangePanel.toBaseDate = rangePanel._convertISOtoMoment("2016-06-11T22:00:00Z");
+    rangePanel.toBaseDate = Px.moment("2016-06-11T22:00:00Z");
 
     flush(function() {
       assert.isFalse(rangePanel.toBaseDate.isSame(rangePanel.fromBaseDate, 'month'));
@@ -55,7 +55,7 @@ suite('Calendars base dates', function() {
 
   test('"to" calendar cant be before "from" calendar', function(done) {
 
-    rangePanel.toBaseDate = rangePanel._convertISOtoMoment("2016-04-11T22:00:00Z");
+    rangePanel.toBaseDate = Px.moment("2016-04-11T22:00:00Z");
 
     flush(function() {
       assert.isFalse(rangePanel.toBaseDate.isBefore(rangePanel.fromBaseDate, 'month'));
@@ -65,7 +65,7 @@ suite('Calendars base dates', function() {
 
   test('"from" calendar cant be same as "to" calendar', function(done) {
 
-    rangePanel.fromBaseDate = rangePanel._convertISOtoMoment("2016-07-11T22:00:00Z");
+    rangePanel.fromBaseDate = Px.moment("2016-07-11T22:00:00Z");
 
     flush(function() {
       assert.isFalse(rangePanel.toBaseDate.isSame(rangePanel.fromBaseDate, 'month'));
@@ -75,7 +75,7 @@ suite('Calendars base dates', function() {
 
   test('"from" calendar cant be after "to" calendar', function(done) {
 
-    rangePanel.fromBaseDate = rangePanel._convertISOtoMoment("2016-09-11T22:00:00Z");
+    rangePanel.fromBaseDate = Px.moment("2016-09-11T22:00:00Z");
 
     flush(function() {
       assert.isFalse(rangePanel.fromBaseDate.isAfter(rangePanel.toBaseDate, 'month'));
@@ -94,8 +94,8 @@ suite('select dates on calendars', function() {
     fromCal = Polymer.dom(rangePanel.root).querySelectorAll('px-calendar-picker')[0],
     toCal = Polymer.dom(rangePanel.root).querySelectorAll('px-calendar-picker')[1];
 
-    rangePanel.fromBaseDate = rangePanel._convertISOtoMoment("2016-06-02T00:00:00Z");
-    rangePanel.toBaseDate = rangePanel._convertISOtoMoment("2016-07-11T00:00:00Z");
+    rangePanel.fromBaseDate = Px.moment("2016-06-02T00:00:00Z");
+    rangePanel.toBaseDate = Px.moment("2016-07-11T00:00:00Z");
 
     flush(function() {
       done();
@@ -118,8 +118,8 @@ suite('select dates on calendars', function() {
 
     //we don't want to dive into the implementation details of calendar and cells.
     //simulate selection by firing events ourselves
-    var firstSelection = rangePanel._convertISOtoMoment("2016-06-03T20:00:00Z"),
-        secondSelection = rangePanel._convertISOtoMoment("2016-06-17T22:00:00Z"),
+    var firstSelection = Px.moment("2016-06-03T20:00:00Z"),
+        secondSelection = Px.moment("2016-06-17T22:00:00Z"),
         prevFrom = rangePanel.fromMoment,
         prevTo = rangePanel.toMoment;
 
@@ -154,8 +154,8 @@ suite('select dates on calendars', function() {
 
     //we don't want to dive into the implementation details of calendar and cells.
     //simulate selection by firing events ourselves
-    var firstSelection = rangePanel._convertISOtoMoment("2016-06-03T20:00:00Z"),
-        secondSelection = rangePanel._convertISOtoMoment("2016-06-17T22:00:00Z"),
+    var firstSelection = Px.moment("2016-06-03T20:00:00Z"),
+        secondSelection = Px.moment("2016-06-17T22:00:00Z"),
         prevFrom = rangePanel.fromMoment,
         prevTo = rangePanel.toMoment;
 
@@ -191,8 +191,8 @@ suite('select dates on calendars', function() {
   test('time should be preserved when changing dates', function(done) {
     //we don't want to dive into the implementation details of calendar and cells.
     //simulate selection by firing events ourselves
-    var firstSelection = rangePanel._convertISOtoMoment("2016-06-03T20:00:00Z"),
-        secondSelection = rangePanel._convertISOtoMoment("2016-06-17T22:00:00Z"),
+    var firstSelection = Px.moment("2016-06-03T20:00:00Z"),
+        secondSelection = Px.moment("2016-06-17T22:00:00Z"),
         prevFrom = rangePanel.fromMoment,
         prevTo = rangePanel.toMoment;
 
@@ -227,8 +227,8 @@ suite('select dates on calendars', function() {
 
     //we don't want to dive into the implementation details of calendar and cells.
     //simulate selection by firing events ourselves
-    var firstSelection = rangePanel._convertISOtoMoment("2016-07-03T00:00:00Z"),
-        secondSelection = rangePanel._convertISOtoMoment("2016-07-17T00:00:00Z");
+    var firstSelection = Px.moment("2016-07-03T00:00:00Z"),
+        secondSelection = Px.moment("2016-07-17T00:00:00Z");
 
     //simulate first selection on to cal
     toCal._selectDate(firstSelection);
@@ -261,8 +261,8 @@ suite('select dates on calendars', function() {
 
     //we don't want to dive into the implementation details of calendar and cells.
     //simulate selection by firing events ourselves
-    var firstSelection = rangePanel._convertISOtoMoment("2016-07-03T00:00:00Z"),
-        secondSelection = rangePanel._convertISOtoMoment("2016-07-17T00:00:00Z");
+    var firstSelection = Px.moment("2016-07-03T00:00:00Z"),
+        secondSelection = Px.moment("2016-07-17T00:00:00Z");
 
     //simulate first selection on to cal
     toCal._selectDate(secondSelection);
@@ -296,8 +296,8 @@ suite('select dates on calendars', function() {
 
     //we don't want to dive into the implementation details of calendar and cells.
     //simulate selection by firing events ourselves
-    var firstSelection = rangePanel._convertISOtoMoment("2016-06-03T00:00:00Z"),
-        secondSelection = rangePanel._convertISOtoMoment("2016-07-17T00:00:00Z");
+    var firstSelection = Px.moment("2016-06-03T00:00:00Z"),
+        secondSelection = Px.moment("2016-07-17T00:00:00Z");
 
     //simulate first selection on from cal
     fromCal._selectDate(firstSelection);
@@ -330,8 +330,8 @@ suite('select dates on calendars', function() {
 
     //we don't want to dive into the implementation details of calendar and cells.
     //simulate selection by firing events ourselves
-    var firstSelection = rangePanel._convertISOtoMoment("2016-07-03T00:00:00Z"),
-        secondSelection = rangePanel._convertISOtoMoment("2016-06-17T00:00:00Z");
+    var firstSelection = Px.moment("2016-07-03T00:00:00Z"),
+        secondSelection = Px.moment("2016-06-17T00:00:00Z");
 
     //simulate first selection on from cal
     toCal._selectDate(firstSelection);
@@ -362,7 +362,7 @@ suite('select dates on calendars', function() {
 })
 
 suite('select last month presets', function(done) {
-  let now, startOfMonth, endOfMonth;
+  let rangePanel, now, startOfMonth, endOfMonth;
 
   suiteSetup(function(done) {
 
@@ -371,8 +371,8 @@ suite('select last month presets', function(done) {
     endOfMonth = now.clone().subtract(1, 'months').endOf('month');
 
     //set old calendars
-    rangePanel.fromBaseDate = rangePanel._convertISOtoMoment("2011-06-02T00:00:00Z");
-    rangePanel.toBaseDate = rangePanel._convertISOtoMoment("2012-07-11T00:00:00Z");
+    rangePanel.fromBaseDate = Px.moment("2011-06-02T00:00:00Z");
+    rangePanel.toBaseDate = Px.moment("2012-07-11T00:00:00Z");
 
     flush(function() {
 
@@ -403,7 +403,7 @@ suite('select last month presets', function(done) {
 });
 
 suite('select this month presets with future dates blocked doesnt select the whole month', function(done) {
-  let now, startOfMonth, endOfMonth;
+  let rangePanel, now, startOfMonth, endOfMonth;
 
   suiteSetup(function(done) {
 
@@ -412,8 +412,8 @@ suite('select this month presets with future dates blocked doesnt select the who
     endOfMonth = now.clone().endOf('month');
 
     //set old calendars
-    rangePanel.fromBaseDate = rangePanel._convertISOtoMoment("2011-06-02T00:00:00Z");
-    rangePanel.toBaseDate = rangePanel._convertISOtoMoment("2012-07-11T00:00:00Z");
+    rangePanel.fromBaseDate = Px.moment("2011-06-02T00:00:00Z");
+    rangePanel.toBaseDate = Px.moment("2012-07-11T00:00:00Z");
 
     rangePanel.blockFutureDates = true;
 
@@ -439,7 +439,7 @@ suite('select this month presets with future dates blocked doesnt select the who
 });
 
 suite('select this month presets with future dates blocked doesnt select the whole month', function(done) {
-  let now, startOfMonth, endOfMonth;
+  let rangePanel, now, startOfMonth, endOfMonth;
 
   suiteSetup(function(done) {
 
@@ -448,8 +448,8 @@ suite('select this month presets with future dates blocked doesnt select the who
     endOfMonth = now.clone().endOf('month');
 
     //set old calendars
-    rangePanel.fromBaseDate = rangePanel._convertISOtoMoment("2011-06-02T00:00:00Z");
-    rangePanel.toBaseDate = rangePanel._convertISOtoMoment("2012-07-11T00:00:00Z");
+    rangePanel.fromBaseDate = Px.moment("2011-06-02T00:00:00Z");
+    rangePanel.toBaseDate = Px.moment("2012-07-11T00:00:00Z");
 
     rangePanel.blockFutureDates = false;
     rangePanel.blockPastDates = true;
@@ -476,7 +476,7 @@ suite('select this month presets with future dates blocked doesnt select the who
 });
 
 suite('select last 10 minutes presets', function(done) {
-  let now, startDateTime, endDateTime;
+  let rangePanel, now, startDateTime, endDateTime;
 
   suiteSetup(function(done) {
 
@@ -485,8 +485,8 @@ suite('select last 10 minutes presets', function(done) {
     endDateTime = now.clone();
 
     //set old calendars
-    rangePanel.fromBaseDate = rangePanel._convertISOtoMoment("2011-06-02T00:00:00Z");
-    rangePanel.toBaseDate = rangePanel._convertISOtoMoment("2012-07-11T00:00:00Z");
+    rangePanel.fromBaseDate = Px.moment("2011-06-02T00:00:00Z");
+    rangePanel.toBaseDate = Px.moment("2012-07-11T00:00:00Z");
 
     flush(function() {
 
@@ -518,7 +518,7 @@ suite('select last 10 minutes presets', function(done) {
 
 
 suite('select function presets', function(done) {
-  let now, startDateTime, endDateTime;
+  let rangePanel, now, startDateTime, endDateTime;
 
   suiteSetup(function(done) {
 
@@ -527,8 +527,8 @@ suite('select function presets', function(done) {
     endDateTime = function() {return now.clone();};
 
     //set old calendars
-    rangePanel.fromBaseDate = rangePanel._convertISOtoMoment("2011-06-02T00:00:00Z");
-    rangePanel.toBaseDate = rangePanel._convertISOtoMoment("2012-07-11T00:00:00Z");
+    rangePanel.fromBaseDate = Px.moment("2011-06-02T00:00:00Z");
+    rangePanel.toBaseDate = Px.moment("2012-07-11T00:00:00Z");
 
     flush(function() {
 
