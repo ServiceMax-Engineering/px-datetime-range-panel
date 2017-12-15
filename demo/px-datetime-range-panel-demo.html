@@ -53,8 +53,8 @@
             hide-time="{{props.hideTime.value}}"
             time-zone="{{props.timeZone.value}}"
             hide-presets="{{props.hidePresets.value}}"
-            min="{{props.min.value}}"
-            max="{{props.max.value}}">
+            min-date="{{props.minDatevalue}}"
+            max-date="{{props.maxDate.value}}">
           </px-datetime-range-panel>
         </div>
       </px-demo-component>
@@ -202,13 +202,13 @@
         inputPlaceholder: 'UTC'
       },
 
-      min: {
+      minDate: {
         type: Object,
         defaultValue: Px.moment().subtract(7, 'day'),
         inputType: 'code:JSON'
       },
 
-      max: {
+      maxDate: {
         type: Object,
         defaultValue: Px.moment().add(7, 'day'),
         inputType: 'code:JSON'
