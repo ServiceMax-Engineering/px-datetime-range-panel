@@ -3,8 +3,8 @@ suite('Calendars base dates', function() {
 
   //reset from base dates for every tests
   setup(function(done) {
-    rangePanel = fixture('range_panel'),
-    fromCal = Polymer.dom(rangePanel.root).querySelectorAll('px-calendar-picker')[0],
+    rangePanel = fixture('range_panel');
+    fromCal = Polymer.dom(rangePanel.root).querySelectorAll('px-calendar-picker')[0];
     toCal = Polymer.dom(rangePanel.root).querySelectorAll('px-calendar-picker')[1];
 
     rangePanel.fromBaseDate = Px.moment("2016-06-01T20:00:00Z");
@@ -89,25 +89,15 @@ suite('select dates on calendars', function() {
   let rangePanel, fromCal, toCal;
 
   //reset from base dates for every tests
-  suiteSetup(function(done) {
-    rangePanel = fixture('range_panel'),
-    fromCal = Polymer.dom(rangePanel.root).querySelectorAll('px-calendar-picker')[0],
+  setup(function(done) {
+    rangePanel = fixture('range_panel');
+    fromCal = Polymer.dom(rangePanel.root).querySelectorAll('px-calendar-picker')[0];
     toCal = Polymer.dom(rangePanel.root).querySelectorAll('px-calendar-picker')[1];
 
     rangePanel.fromBaseDate = Px.moment("2016-06-02T00:00:00Z");
     rangePanel.toBaseDate = Px.moment("2016-07-11T00:00:00Z");
-
-    flush(function() {
-      done();
-    });
-  });
-
-  setup(function(done) {
-    //remove all selection
-    fromCal.fromMoment = null;
-    fromCal.toMoment = null;
-    toCal.fromMoment = null;
-    toCal.toMoment = null;
+    rangePanel.fromMoment = Px.moment("2016-06-02T00:00:00Z");
+    rangePanel.toMoment = Px.moment("2016-07-11T00:00:00Z");
 
     flush(function() {
       done();
@@ -359,13 +349,13 @@ suite('select dates on calendars', function() {
       });
     });
   });
-})
+});
 
 suite('select last month presets', function(done) {
   let rangePanel, now, startOfMonth, endOfMonth;
 
-  suiteSetup(function(done) {
-
+  setup(function(done) {
+    rangePanel = fixture('range_panel');
     now = moment.tz(moment(), rangePanel.timeZone);
     startOfMonth = now.clone().subtract(1, 'months').startOf('month');
     endOfMonth = now.clone().subtract(1, 'months').endOf('month');
@@ -405,8 +395,8 @@ suite('select last month presets', function(done) {
 suite('select this month presets with future dates blocked doesnt select the whole month', function(done) {
   let rangePanel, now, startOfMonth, endOfMonth;
 
-  suiteSetup(function(done) {
-
+  setup(function(done) {
+    rangePanel = fixture('range_panel');
     now = moment.tz(moment(), rangePanel.timeZone);
     startOfMonth = now.clone().startOf('month');
     endOfMonth = now.clone().endOf('month');
@@ -441,8 +431,8 @@ suite('select this month presets with future dates blocked doesnt select the who
 suite('select this month presets with future dates blocked doesnt select the whole month', function(done) {
   let rangePanel, now, startOfMonth, endOfMonth;
 
-  suiteSetup(function(done) {
-
+  setup(function(done) {
+    rangePanel = fixture('range_panel');
     now = moment.tz(moment(), rangePanel.timeZone);
     startOfMonth = now.clone().startOf('month');
     endOfMonth = now.clone().endOf('month');
@@ -478,10 +468,10 @@ suite('select this month presets with future dates blocked doesnt select the who
 suite('select last 10 minutes presets', function(done) {
   let rangePanel, now, startDateTime, endDateTime;
 
-  suiteSetup(function(done) {
-
+  setup(function(done) {
+    rangePanel = fixture('range_panel');
     now = moment.tz(moment(), rangePanel.timeZone);
-    startDateTime = now.clone().subtract(10, 'minutes'),
+    startDateTime = now.clone().subtract(10, 'minutes');
     endDateTime = now.clone();
 
     //set old calendars
@@ -498,21 +488,21 @@ suite('select last 10 minutes presets', function(done) {
                     "endDateTime": endDateTime
                   }}));
       flush(function() {
-        done();
+        setTimeout(function() {
+          done();
+        },50);
       });
     });
   });
 
   test('shows appropriate calendars', function() {
-
     assert.isTrue(rangePanel.fromBaseDate.isSame(startDateTime, 'month'));
     assert.isTrue(rangePanel.toBaseDate.isSame(endDateTime.clone().add(1, 'month'), 'month'));
   });
 
   test('moments have been updated', function() {
-
     assert.isTrue(rangePanel.fromMoment.isSame(startDateTime, 'second'));
-    assert.isTrue(rangePanel.toMoment.isSame(endDateTime.startOf('second')), 'second');
+    assert.isTrue(rangePanel.toMoment.isSame(endDateTime, 'second'));
   });
 });
 
@@ -520,8 +510,8 @@ suite('select last 10 minutes presets', function(done) {
 suite('select function presets', function(done) {
   let rangePanel, now, startDateTime, endDateTime;
 
-  suiteSetup(function(done) {
-
+  setup(function(done) {
+    rangePanel = fixture('range_panel');
     now = moment.tz(moment(), rangePanel.timeZone);
     startDateTime = function() {now.clone().subtract(10, 'minutes');};
     endDateTime = function() {return now.clone();};
@@ -546,13 +536,11 @@ suite('select function presets', function(done) {
   });
 
   test('shows appropriate calendars', function() {
-
     assert.isTrue(rangePanel.fromBaseDate.isSame(startDateTime(), 'month'));
     assert.isTrue(rangePanel.toBaseDate.isSame(endDateTime().clone().add(1, 'month'), 'month'));
   });
 
   test('moments have been updated', function() {
-
     assert.isTrue(rangePanel.fromMoment.isSame(startDateTime(), 'second'));
     assert.isTrue(rangePanel.toMoment.isSame(endDateTime()), 'second')
   });
