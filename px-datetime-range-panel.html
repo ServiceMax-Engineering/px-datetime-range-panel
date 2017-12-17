@@ -44,7 +44,7 @@ Custom property | Description
           <div class="flex">
             <div class="u-mr+">
               <px-calendar-picker
-                id="from"
+                id="fromCalendar"
                 hide-next-button="{{_areConsecutiveMonth(fromBaseDate, toBaseDate)}}"
                 block-future-dates="{{blockFutureDates}}"
                 block-past-dates="{{blockPastDates}}"
@@ -62,7 +62,7 @@ Custom property | Description
                   <px-datetime-field
                     id="time"
                     class="box__time"
-                    moment-obj="{{fromMoment}}"
+                    moment-obj="{{_tempFromMomentObj}}"
                     hide-icon
                     hide-date
                     is-valid="{{_fromTimeIsValid}}"
@@ -79,7 +79,7 @@ Custom property | Description
             </div>
             <div>
               <px-calendar-picker
-                id="to"
+                id="toCalendar"
                 hide-previous-button="{{_areConsecutiveMonth(fromBaseDate, toBaseDate)}}"
                 block-future-dates="{{blockFutureDates}}"
                 block-past-dates="{{blockPastDates}}"
@@ -97,7 +97,7 @@ Custom property | Description
                   <px-datetime-field
                     id="time"
                     class="box__time"
-                    moment-obj="{{toMoment}}"
+                    moment-obj="{{_tempToMomentObj}}"
                     hide-icon
                     hide-date
                     is-valid="{{_toTimeIsValid}}"
@@ -230,8 +230,8 @@ Custom property | Description
           return [
             {
               "displayText": "Last 7 Days",
-              "startDateTime": now.clone().subtract(7, 'days'),
-              "endDateTime": now
+              "startDateTime": now.clone().subtract(7, 'days').startOf('day'),
+              "endDateTime": now.clone().endOf('day')
             },
             {
               "displayText": "This Month",
@@ -248,7 +248,6 @@ Custom property | Description
       },
       /**
        * Whether time should be shown
-       *
        */
       hideTime: {
         type: Boolean,
@@ -256,7 +255,6 @@ Custom property | Description
       },
       /**
        * Moment format used for the time
-       *
        */
        timeFormat: {
         type: String,
@@ -264,7 +262,6 @@ Custom property | Description
       },
       /**
        * Whether the moment objects are being set internally (=from this component)
-       *
        */
       _internalSet: {
         type: Boolean,
@@ -278,6 +275,9 @@ Custom property | Description
         type: Boolean,
         value: true
       },
+      /**
+       * computed from `_fromTimeIsValid`, `_toTimeIsValid`, and `hideTime`
+       */
       timeIsValid: {
         type: Boolean,
         computed: '_getTimeIsValid(_fromTimeIsValid, _toTimeIsValid, hideTime)'
@@ -287,12 +287,12 @@ Custom property | Description
        */
       _canApply: {
         type: Boolean,
-        computed: '_canApplyButton(timeIsValid, fromMoment, toMoment)'
+        computed: '_canApplyButton(timeIsValid, _tempFromMomentObj, _tempToMomentObj)'
       }
     },
     observers:[
-      '_fromMomentChanged(fromMoment)',
-      '_toMomentChanged(toMoment)'
+      '_updateFromCalendar(fromMoment)',
+      '_updateToCalendar(toMoment)'
     ],
     listeners: {
       'px-datetime-button-clicked': '_handleButtonClick'
@@ -303,8 +303,8 @@ Custom property | Description
           toHandler = this._toPicked.bind(this),
           presetHandler = this._presetSelected.bind(this);
 
-      this.$.from.addEventListener('px-date-selected', fromHandler);
-      this.$.to.addEventListener('px-date-selected', toHandler);
+      this.$.fromCalendar.addEventListener('px-date-selected', fromHandler);
+      this.$.toCalendar.addEventListener('px-date-selected', toHandler);
       this.addEventListener('px-preset-selected', presetHandler);
     },
     _timeZoneChanged: function() {
@@ -349,38 +349,35 @@ Custom property | Description
 
       //make sure those presets are allowed
       var today = Px.moment.tz(Px.moment(), this.timeZone),
-
           startOk = (!this.blockFutureDates || (start.isSameOrBefore(today, 'day'))) && (!this.blockPastDates || (start.isSameOrAfter(today, 'day'))),
           endOk = (!this.blockFutureDates || (end.isSameOrBefore(today, 'day'))) && (!this.blockPastDates || (end.isSameOrAfter(today, 'day')));
 
-
-
       //check if this preset start date is allowed
       if(startOk) {
-        this.$.from.fromMoment = start.clone();
-        this.$.to.fromMoment = start.clone();
-        this.set('fromMoment', start.clone());
+        this.$.fromCalendar.fromMoment = start.clone();
+        this.$.toCalendar.fromMoment = start.clone();
+        this.set('_tempFromMomentObj', start.clone());
 
       } else {
         //start date is not ok but end is, it means we're blocking past date. Set start date to today
         if(endOk) {
-          this.$.from.fromMoment = today.clone();
-          this.$.to.fromMoment = today.clone();
-          this.set('fromMoment', this._preserveTime(this.fromMoment, today.clone()));
+          this.$.fromCalendar.fromMoment = today.clone();
+          this.$.toCalendar.fromMoment = today.clone();
+          this.set('_tempFromMomentObj', this._preserveTime(this._tempFromMomentObj, today.clone()));
         }
       }
 
       //check if this preset end date is allowed
       if(endOk) {
-        this.$.from.toMoment = end.clone();
-        this.$.to.toMoment = end.clone();
-        this.set('toMoment', end.clone());
+        this.$.fromCalendar.toMoment = end.clone();
+        this.$.toCalendar.toMoment = end.clone();
+        this.set('_tempToMomentObj', end.clone());
       } else {
         //end date is not ok but start is, it means we're blocking future date. Set end date to today
         if(startOk) {
-          this.$.from.toMoment = today.clone();
-          this.$.to.toMoment = today.clone();
-          this.set('toMoment', this._preserveTime(this.toMoment, today.clone()));
+          this.$.fromCalendar.toMoment = today.clone();
+          this.$.toCalendar.toMoment = today.clone();
+          this.set('_tempToMomentObj', this._preserveTime(this._tempToMomentObj, today.clone()));
         }
       }
 
@@ -394,96 +391,90 @@ Custom property | Description
     },
 
     _rangeIsSelected: function() {
-      return (this.$.from.fromMoment && this.$.to.toMoment) ||
-             (this.$.from.fromMoment && this.$.from.toMoment) ||
-             (this.$.to.fromMoment && this.$.to.toMoment);
+      return (this.$.fromCalendar.fromMoment && this.$.toCalendar.toMoment) ||
+             (this.$.fromCalendar.fromMoment && this.$.fromCalendar.toMoment) ||
+             (this.$.toCalendar.fromMoment && this.$.toCalendar.toMoment);
     },
 
     _fromPicked: function(event) {
-
       this._internalSet = true;
 
       //reset if needed
       if(this._rangeIsSelected()) {
-        this._resetRange(this.$.to);
+        this._resetRange(this.$.toCalendar);
       }
       if(!this.hidePresets) {
         this.$$('px-datetime-presets').selectedItem = null;
       }
 
       //nothing selected, assume it's going to be the start date
-      if(!this.$.from.toMoment && !this.$.to.toMoment && !this.$.to.fromMoment) {
-        this.set('fromMoment', this._preserveTime(this.fromMoment, event.detail));
+      if(!this.$.fromCalendar.toMoment && !this.$.toCalendar.toMoment && !this.$.toCalendar.fromMoment) {
+        this.set('_tempFromMomentObj', this._preserveTime(this._tempFromMomentObj, event.detail));
       } else {
 
-        if(this.$.from.toMoment) {
+        if(this.$.fromCalendar.toMoment) {
           //range is picked solely on 'from' calendar
 
           //swap dates if needed
-          if(event.detail.isBefore(this.fromMoment)) {
-
-            this.set('toMoment', this._preserveTime(this.toMoment, this.fromMoment.clone()));
-            this.set('fromMoment', this._preserveTime(this.fromMoment, event.detail));
+          if(event.detail.isBefore(this._tempFromMomentObj)) {
+            this.set('_tempToMomentObj', this._preserveTime(this._tempToMomentObj, this._tempFromMomentObj.clone()));
+            this.set('_tempFromMomentObj', this._preserveTime(this._tempFromMomentObj, event.detail));
           } else {
-            this.set('toMoment', this._preserveTime(this.toMoment, event.detail));
+            this.set('_tempToMomentObj', this._preserveTime(this._tempToMomentObj, event.detail));
           }
 
           //make sure 'to' calendar is aware of the range as well
-          this.$.to.fromMoment = this.fromMoment;
-          this.$.to.toMoment = this.toMoment;
+          this.$.toCalendar.fromMoment = this._tempFromMomentObj;
+          this.$.toCalendar.toMoment = this._tempToMomentObj;
         } else {
           //'to' moment selected from other calendar. Adjust both calendar so they
           //display properly
-          this.$.to.toMoment = this.toMoment;
-          this.$.to.fromMoment = event.detail;
-          this.$.from.toMoment = this.toMoment;
-          this.set('fromMoment', this._preserveTime(this.fromMoment, event.detail));
+          this.$.toCalendar.toMoment = this._tempToMomentObj;
+          this.$.toCalendar.fromMoment = event.detail;
+          this.$.fromCalendar.toMoment = this._tempToMomentObj;
+          this.set('_tempFromMomentObj', this._preserveTime(this._tempFromMomentObj, event.detail));
         }
       }
       this._internalSet = false;
     },
 
     _toPicked: function(event) {
-
       this._internalSet = true;
 
       //reset if needed
       if(this._rangeIsSelected()) {
-        this._resetRange(this.$.from);
+        this._resetRange(this.$.fromCalendar);
       }
       if(!this.hidePresets) {
         this.$$('px-datetime-presets').selectedItem = null;
       }
 
       //nothing selected, assume it's going to be the end date
-      if(!this.$.from.toMoment && !this.$.to.toMoment && !this.$.from.fromMoment) {
-
-        this.set('toMoment', this._preserveTime(this.toMoment, event.detail));
+      if(!this.$.fromCalendar.toMoment && !this.$.toCalendar.toMoment && !this.$.fromCalendar.fromMoment) {
+        this.set('_tempToMomentObj', this._preserveTime(this._tempToMomentObj, event.detail));
       } else {
-
-        if(this.$.to.toMoment) {
+        if(this.$.toCalendar.toMoment) {
           //range is picked solely on 'to' calendar
 
           //swap dates if needed
-          if(event.detail.isAfter(this.toMoment)) {
-
-            this.set('fromMoment', this._preserveTime(this.fromMoment, this.toMoment.clone()));
-            this.set('toMoment', this._preserveTime(this.toMoment, event.detail));
+          if(event.detail.isAfter(this._tempToMomentObj)) {
+            this.set('_tempFromMomentObj', this._preserveTime(this._tempFromMomentObj, this._tempToMomentObj.clone()));
+            this.set('_tempToMomentObj', this._preserveTime(this._tempToMomentObj, event.detail));
           } else {
-            this.set('fromMoment', this._preserveTime(this.fromMoment, event.detail));
+            this.set('_tempFromMomentObj', this._preserveTime(this._tempFromMomentObj, event.detail));
           }
           //make sure both calendars reflects the right state
-          this.$.to.toMoment = this.toMoment;
-          this.$.to.fromMoment = this.fromMoment;
-          this.$.from.fromMoment = this.fromMoment;
-          this.$.from.toMoment = this.toMoment;
+          this.$.toCalendar.toMoment = this._tempToMomentObj;
+          this.$.toCalendar.fromMoment = this._tempFromMomentObj;
+          this.$.fromCalendar.fromMoment = this._tempFromMomentObj;
+          this.$.fromCalendar.toMoment = this._tempToMomentObj;
         } else {
           //from moment selected from other calendar. Adjust both calendar so they
           //display properly
-          this.$.from.toMoment = event.detail;
-          this.$.to.fromMoment = this.$.from.fromMoment;
-          this.$.to.toMoment = event.detail;
-          this.set('toMoment', this._preserveTime(this.toMoment, event.detail));
+          this.$.fromCalendar.toMoment = event.detail;
+          this.$.toCalendar.fromMoment = this.$.fromCalendar.fromMoment;
+          this.$.toCalendar.toMoment = event.detail;
+          this.set('_tempToMomentObj', this._preserveTime(this._tempToMomentObj, event.detail));
         }
       }
       this._internalSet = false;
@@ -498,7 +489,6 @@ Custom property | Description
     },
 
     _fromBaseDateChanged: function() {
-
       //make sure the new base date is at least the month before 'to'
       if(!this._internalSet && this.fromBaseDate && this.toBaseDate &&
         this.fromBaseDate.isSameOrAfter(this.toBaseDate, 'month')) {
@@ -506,8 +496,8 @@ Custom property | Description
       }
 
       //don't allow the 'to' calendar to choose dates before 1 month after 'from' calendar
-      if(this.$.from.isAtSelectionLevel) {
-        this.$.to.blockDatesBefore = Px.moment.tz(this.fromBaseDate, this.timeZone).add(1, 'month').startOf('month');
+      if(this.$.fromCalendar.isAtSelectionLevel) {
+        this.$.toCalendar.blockDatesBefore = Px.moment.tz(this.fromBaseDate, this.timeZone).add(1, 'month').startOf('month');
       }
     },
 
@@ -520,33 +510,35 @@ Custom property | Description
       }
 
       //don't allow the 'to' calendar to choose dates before 1 month after 'from' calendar
-      if(this.$.to.isAtSelectionLevel) {
-        this.$.from.blockDatesAfter = Px.moment.tz(this.toBaseDate, this.timeZone).subtract(1, 'month').endOf('month');
+      if(this.$.toCalendar.isAtSelectionLevel) {
+        this.$.fromCalendar.blockDatesAfter = Px.moment.tz(this.toBaseDate, this.timeZone).subtract(1, 'month').endOf('month');
       }
     },
-    _fromMomentChanged: function() {
-      //if the change comes from the "outside" synchronize the calendar
+    /**
+     * if the change comes from the "outside" synchronize the calendar
+     */
+    _updateFromCalendar: function() {
       if(!this._internalSet) {
-
-        this.$.from.fromMoment = this.fromMoment;
-        this.$.to.fromMoment = this.fromMoment;
-        this.set('fromBaseDate', this.fromMoment);
+        this.$.fromCalendar.fromMoment = this._tempFromMomentObj;
+        this.$.toCalendar.fromMoment = this._tempFromMomentObj;
+        this.set('fromBaseDate', this._tempFromMomentObj);
       }
     },
-    _toMomentChanged: function() {
-      //if the change comes from the "outside" synchronize the calendar
+    /**
+     * if the change comes from the "outside" synchronize the calendar
+     */
+    _updateToCalendar: function() {
       if(!this._internalSet) {
-
-        this.$.from.toMoment = this.toMoment;
-        this.$.to.toMoment = this.toMoment;
-        this.set('toBaseDate', this.toMoment);
+        this.$.fromCalendar.toMoment = this._tempToMomentObj;
+        this.$.toCalendar.toMoment = this._tempToMomentObj;
+        this.set('toBaseDate', this._tempToMomentObj);
       }
     },
-
-    _canApplyButton: function(timeIsValid, fromMoment, toMoment) {
-
-      //can apply if range is in the right order and times are valid (or not shown)
-      return this._validateRangeOrder(fromMoment, toMoment) && timeIsValid;
+    /**
+     * can apply if range is in the right order and times are valid (or not shown)
+     */
+    _canApplyButton: function(timeIsValid, _tempFromMomentObj, _tempToMomentObj) {
+      return this._validateRangeOrder(_tempFromMomentObj, _tempToMomentObj) && timeIsValid;
     },
 
     _getTimeIsValid: function(_fromTimeIsValid, _toTimeIsValid, hideTime) {
