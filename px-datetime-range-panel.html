@@ -62,7 +62,7 @@ Custom property | Description
                   <px-datetime-field
                     id="time"
                     class="box__time"
-                    moment-obj="{{_tempFromMomentObj}}"
+                    moment-obj="{{fromMoment}}"
                     hide-icon
                     hide-date
                     is-valid="{{_fromTimeIsValid}}"
@@ -97,7 +97,7 @@ Custom property | Description
                   <px-datetime-field
                     id="time"
                     class="box__time"
-                    moment-obj="{{_tempToMomentObj}}"
+                    moment-obj="{{toMoment}}"
                     hide-icon
                     hide-date
                     is-valid="{{_toTimeIsValid}}"
@@ -287,7 +287,7 @@ Custom property | Description
        */
       _canApply: {
         type: Boolean,
-        computed: '_canApplyButton(timeIsValid, _tempFromMomentObj, _tempToMomentObj)'
+        computed: '_canApplyComputed(timeIsValid, fromMoment, toMoment)'
       }
     },
     observers:[
@@ -356,14 +356,14 @@ Custom property | Description
       if(startOk) {
         this.$.fromCalendar.fromMoment = start.clone();
         this.$.toCalendar.fromMoment = start.clone();
-        this.set('_tempFromMomentObj', start.clone());
+        this.set('fromMoment', start.clone());
 
       } else {
         //start date is not ok but end is, it means we're blocking past date. Set start date to today
         if(endOk) {
           this.$.fromCalendar.fromMoment = today.clone();
           this.$.toCalendar.fromMoment = today.clone();
-          this.set('_tempFromMomentObj', this._preserveTime(this._tempFromMomentObj, today.clone()));
+          this.set('fromMoment', this._preserveTime(this.fromMoment, today.clone()));
         }
       }
 
@@ -371,13 +371,13 @@ Custom property | Description
       if(endOk) {
         this.$.fromCalendar.toMoment = end.clone();
         this.$.toCalendar.toMoment = end.clone();
-        this.set('_tempToMomentObj', end.clone());
+        this.set('toMoment', end.clone());
       } else {
         //end date is not ok but start is, it means we're blocking future date. Set end date to today
         if(startOk) {
           this.$.fromCalendar.toMoment = today.clone();
           this.$.toCalendar.toMoment = today.clone();
-          this.set('_tempToMomentObj', this._preserveTime(this._tempToMomentObj, today.clone()));
+          this.set('toMoment', this._preserveTime(this.toMoment, today.clone()));
         }
       }
 
@@ -409,30 +409,30 @@ Custom property | Description
 
       //nothing selected, assume it's going to be the start date
       if(!this.$.fromCalendar.toMoment && !this.$.toCalendar.toMoment && !this.$.toCalendar.fromMoment) {
-        this.set('_tempFromMomentObj', this._preserveTime(this._tempFromMomentObj, event.detail));
+        this.set('fromMoment', this._preserveTime(this.fromMoment, event.detail));
       } else {
 
         if(this.$.fromCalendar.toMoment) {
           //range is picked solely on 'from' calendar
 
           //swap dates if needed
-          if(event.detail.isBefore(this._tempFromMomentObj)) {
-            this.set('_tempToMomentObj', this._preserveTime(this._tempToMomentObj, this._tempFromMomentObj.clone()));
-            this.set('_tempFromMomentObj', this._preserveTime(this._tempFromMomentObj, event.detail));
+          if(event.detail.isBefore(this.fromMoment)) {
+            this.set('toMoment', this._preserveTime(this.toMoment, this.fromMoment.clone()));
+            this.set('fromMoment', this._preserveTime(this.fromMoment, event.detail));
           } else {
-            this.set('_tempToMomentObj', this._preserveTime(this._tempToMomentObj, event.detail));
+            this.set('toMoment', this._preserveTime(this.toMoment, event.detail));
           }
 
           //make sure 'to' calendar is aware of the range as well
-          this.$.toCalendar.fromMoment = this._tempFromMomentObj;
-          this.$.toCalendar.toMoment = this._tempToMomentObj;
+          this.$.toCalendar.fromMoment = this.fromMoment;
+          this.$.toCalendar.toMoment = this.toMoment;
         } else {
           //'to' moment selected from other calendar. Adjust both calendar so they
           //display properly
-          this.$.toCalendar.toMoment = this._tempToMomentObj;
+          this.$.toCalendar.toMoment = this.toMoment;
           this.$.toCalendar.fromMoment = event.detail;
-          this.$.fromCalendar.toMoment = this._tempToMomentObj;
-          this.set('_tempFromMomentObj', this._preserveTime(this._tempFromMomentObj, event.detail));
+          this.$.fromCalendar.toMoment = this.toMoment;
+          this.set('fromMoment', this._preserveTime(this.fromMoment, event.detail));
         }
       }
       this._internalSet = false;
@@ -451,30 +451,30 @@ Custom property | Description
 
       //nothing selected, assume it's going to be the end date
       if(!this.$.fromCalendar.toMoment && !this.$.toCalendar.toMoment && !this.$.fromCalendar.fromMoment) {
-        this.set('_tempToMomentObj', this._preserveTime(this._tempToMomentObj, event.detail));
+        this.set('toMoment', this._preserveTime(this.toMoment, event.detail));
       } else {
         if(this.$.toCalendar.toMoment) {
           //range is picked solely on 'to' calendar
 
           //swap dates if needed
-          if(event.detail.isAfter(this._tempToMomentObj)) {
-            this.set('_tempFromMomentObj', this._preserveTime(this._tempFromMomentObj, this._tempToMomentObj.clone()));
-            this.set('_tempToMomentObj', this._preserveTime(this._tempToMomentObj, event.detail));
+          if(event.detail.isAfter(this.toMoment)) {
+            this.set('fromMoment', this._preserveTime(this.fromMoment, this.toMoment.clone()));
+            this.set('toMoment', this._preserveTime(this.toMoment, event.detail));
           } else {
-            this.set('_tempFromMomentObj', this._preserveTime(this._tempFromMomentObj, event.detail));
+            this.set('fromMoment', this._preserveTime(this.fromMoment, event.detail));
           }
           //make sure both calendars reflects the right state
-          this.$.toCalendar.toMoment = this._tempToMomentObj;
-          this.$.toCalendar.fromMoment = this._tempFromMomentObj;
-          this.$.fromCalendar.fromMoment = this._tempFromMomentObj;
-          this.$.fromCalendar.toMoment = this._tempToMomentObj;
+          this.$.toCalendar.toMoment = this.toMoment;
+          this.$.toCalendar.fromMoment = this.fromMoment;
+          this.$.fromCalendar.fromMoment = this.fromMoment;
+          this.$.fromCalendar.toMoment = this.toMoment;
         } else {
           //from moment selected from other calendar. Adjust both calendar so they
           //display properly
           this.$.fromCalendar.toMoment = event.detail;
           this.$.toCalendar.fromMoment = this.$.fromCalendar.fromMoment;
           this.$.toCalendar.toMoment = event.detail;
-          this.set('_tempToMomentObj', this._preserveTime(this._tempToMomentObj, event.detail));
+          this.set('toMoment', this._preserveTime(this.toMoment, event.detail));
         }
       }
       this._internalSet = false;
@@ -519,9 +519,9 @@ Custom property | Description
      */
     _updateFromCalendar: function() {
       if(!this._internalSet) {
-        this.$.fromCalendar.fromMoment = this._tempFromMomentObj;
-        this.$.toCalendar.fromMoment = this._tempFromMomentObj;
-        this.set('fromBaseDate', this._tempFromMomentObj);
+        this.$.fromCalendar.fromMoment = this.fromMoment;
+        this.$.toCalendar.fromMoment = this.fromMoment;
+        this.set('fromBaseDate', this.fromMoment);
       }
     },
     /**
@@ -529,16 +529,16 @@ Custom property | Description
      */
     _updateToCalendar: function() {
       if(!this._internalSet) {
-        this.$.fromCalendar.toMoment = this._tempToMomentObj;
-        this.$.toCalendar.toMoment = this._tempToMomentObj;
-        this.set('toBaseDate', this._tempToMomentObj);
+        this.$.fromCalendar.toMoment = this.toMoment;
+        this.$.toCalendar.toMoment = this.toMoment;
+        this.set('toBaseDate', this.toMoment);
       }
     },
     /**
      * can apply if range is in the right order and times are valid (or not shown)
      */
-    _canApplyButton: function(timeIsValid, _tempFromMomentObj, _tempToMomentObj) {
-      return this._validateRangeOrder(_tempFromMomentObj, _tempToMomentObj) && timeIsValid;
+    _canApplyComputed: function(timeIsValid, fromMoment, toMoment) {
+      return this._validateRangeOrder(fromMoment, toMoment) && timeIsValid;
     },
 
     _getTimeIsValid: function(_fromTimeIsValid, _toTimeIsValid, hideTime) {
