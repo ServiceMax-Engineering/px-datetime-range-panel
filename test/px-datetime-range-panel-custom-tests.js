@@ -20,8 +20,8 @@ suite('Calendars base dates', function() {
   });
 
   test('middle arrows not shown when month consecutive', function() {
-    var fromCalendar = Polymer.dom(rangePanel.root).querySelector('#from');
-    var toCalendar = Polymer.dom(rangePanel.root).querySelector('#to');
+    var fromCalendar = Polymer.dom(rangePanel.root).querySelector('#fromCalendar');
+    var toCalendar = Polymer.dom(rangePanel.root).querySelector('#toCalendar');
     assert.isFalse(fromCalendar.hidePreviousButton);
     assert.isTrue(fromCalendar.hideNextButton);
     assert.isTrue(toCalendar.hidePreviousButton);
@@ -33,8 +33,8 @@ suite('Calendars base dates', function() {
     rangePanel.toBaseDate = Px.moment("2016-08-11T22:00:00Z");
 
     flush(function() {
-      var fromCalendar = Polymer.dom(rangePanel.root).querySelector('#from');
-      var toCalendar = Polymer.dom(rangePanel.root).querySelector('#to');
+      var fromCalendar = Polymer.dom(rangePanel.root).querySelector('#fromCalendar');
+      var toCalendar = Polymer.dom(rangePanel.root).querySelector('#toCalendar');
       assert.isFalse(fromCalendar.hidePreviousButton);
       assert.isFalse(fromCalendar.hideNextButton);
       assert.isFalse(toCalendar.hidePreviousButton);
@@ -513,7 +513,7 @@ suite('select function presets', function(done) {
   setup(function(done) {
     rangePanel = fixture('range_panel');
     now = moment.tz(moment(), rangePanel.timeZone);
-    startDateTime = function() {now.clone().subtract(10, 'minutes');};
+    startDateTime = function() {return now.clone().subtract(10, 'minutes');};
     endDateTime = function() {return now.clone();};
 
     //set old calendars
@@ -542,6 +542,6 @@ suite('select function presets', function(done) {
 
   test('moments have been updated', function() {
     assert.isTrue(rangePanel.fromMoment.isSame(startDateTime(), 'second'));
-    assert.isTrue(rangePanel.toMoment.isSame(endDateTime()), 'second')
+    assert.isTrue(rangePanel.toMoment.isSame(endDateTime(), 'second'));
   });
 });
