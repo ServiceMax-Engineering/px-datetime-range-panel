@@ -226,7 +226,7 @@ Custom property | Description
       presetRanges: {
         type: Object,
         value: function() {
-          var now = Px.moment();
+          var now = Px.moment.tz(this.timeZone);
           return [
             {
               "displayText": "Last 7 Days",
