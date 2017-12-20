@@ -43,9 +43,15 @@
 
       <!-- Component ---------------------------------------------------------->
       <px-demo-component slot="px-demo-component">
+          <p class=u-mb0>Events fired: <strong>from-moment-changed</strong> and <strong>to-moment-changed</strong></p>
+          <p class="zeta u-mt0">See API Reference below for more details</p>
+          <p class="u-mb++">Submitted range: <strong>{{props.fromMoment.value}}</strong> To: <strong>{{props.toMoment.value}}</strong></p>
+
         <div style="height: 430px; width: 630px;">
           <px-datetime-range-panel
             style="position: relative;"
+            from-moment="{{props.fromMoment.value}}"
+            to-moment="{{props.toMoment.value}}"
             time-format="{{props.timeFormat.value}}"
             show-buttons="{{props.showButtons.value}}"
             block-future-dates="{{props.blockFutureDates.value}}"
@@ -64,7 +70,8 @@
         slot="px-demo-component-snippet"
         element-properties="{{props}}"
         element-name="px-datetime-range-panel"
-        links-includes="[[linksIncludes]]">
+        links-includes="[[linksIncludes]]"
+        suppress-property-values="[[suppressPropertyValues]]">
       </px-demo-component-snippet>
     </px-demo-interactive>
 
@@ -107,6 +114,10 @@
             return props;
           }
       },
+      suppressPropertyValues: {
+        type: Array,
+        value: function() { return ['toMoment', 'fromMoment']; }
+      },
 
       /**
        * An array of pre-configured `props` that can be used to provide the user
@@ -132,8 +143,10 @@
               hideTime: false,
               timeZone: "UTC",
               hidePresets: false,
-              min: "{}",
-              max: "{}"
+              minDate: Px.moment().subtract(3, 'month'),
+              maxDate: Px.moment().add(3, 'month'),
+              fromMoment: Px.moment().subtract(8, 'day').startOf('day'),
+              toMoment: Px.moment().subtract(1, 'day').startOf('day'),
             },
 
             { configName: "Only calendar",
@@ -144,8 +157,10 @@
               hideTime: true,
               timeZone: "America/Los_Angeles",
               hidePresets: true,
-              min: "{}",
-              max: "{}"
+              minDate: Px.moment().subtract(3, 'month'),
+              maxDate: Px.moment().add(3, 'month'),
+              fromMoment: Px.moment().subtract(8, 'day').startOf('day'),
+              toMoment: Px.moment().subtract(1, 'day').startOf('day'),
             }
           ]
         }
@@ -203,15 +218,27 @@
       },
 
       minDate: {
-        type: Object,
-        defaultValue: Px.moment().subtract(7, 'day'),
-        inputType: 'code:JSON'
+        type: String,
+        defaultValue: Px.moment().subtract(3, 'month').toISOString(),
+        inputType: 'text',
+        inputPlaceholder: 'ISOString'
       },
 
       maxDate: {
+        type: String,
+        defaultValue: Px.moment().add(3, 'month').toISOString(),
+        inputType: 'text',
+        inputPlaceholder: 'ISOString'
+      },
+
+      fromMoment: {
         type: Object,
-        defaultValue: Px.moment().add(7, 'day'),
-        inputType: 'code:JSON'
+        defaultValue: null
+      },
+
+      toMoment: {
+        type: Object,
+        defaultValue: null
       }
 
     },
