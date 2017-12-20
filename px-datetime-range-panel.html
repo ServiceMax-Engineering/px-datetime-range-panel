@@ -427,10 +427,10 @@ Custom property | Description
      */
     _validateDateBlock: function(date, today) {
       return {
-        blockFutureValid: !this.blockFutureDates || start.isSameOrBefore(today, 'day'),
-        blockPastValid: !this.blockPastDates || start.isSameOrAfter(today, 'day'),
-        blockMinValid: !this.minDate || start.isAfter(this.minDate),
-        blockMaxValid: !this.maxDate || start.isBefore(this.maxDate)
+        blockFutureValid: !this.blockFutureDates || date.isSameOrBefore(today, 'day'),
+        blockPastValid: !this.blockPastDates || date.isSameOrAfter(today, 'day'),
+        blockMinValid: !this.minDate || date.isAfter(this.minDate),
+        blockMaxValid: !this.maxDate || date.isBefore(this.maxDate)
       };
     },
 
