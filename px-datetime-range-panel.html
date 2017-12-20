@@ -348,40 +348,90 @@ Custom property | Description
       this.set('fromBaseDate', start.clone());
 
       //make sure those presets are allowed
-      var today = Px.moment.tz(Px.moment(), this.timeZone),
-          startOk = (!this.blockFutureDates || (start.isSameOrBefore(today, 'day'))) && (!this.blockPastDates || (start.isSameOrAfter(today, 'day'))),
-          endOk = (!this.blockFutureDates || (end.isSameOrBefore(today, 'day'))) && (!this.blockPastDates || (end.isSameOrAfter(today, 'day')));
+      var validity = this._validatePresetDates(start, end);
 
-      //check if this preset start date is allowed
-      if(startOk) {
-        this.$.fromCalendar.fromMoment = start.clone();
-        this.$.toCalendar.fromMoment = start.clone();
-        this.set('fromMoment', start.clone());
+      if(validity) {
+        //make sure we clone so instances are not shared
+        this.$.fromCalendar.fromMoment = validity.start.clone();
+        this.$.toCalendar.fromMoment = validity.start.clone();
+        this.set('fromMoment', validity.preserveStartTime ? this._preserveTime(this.fromMoment, validity.start.clone()) : validity.start.clone());
 
-      } else {
-        //start date is not ok but end is, it means we're blocking past date. Set start date to today
-        if(endOk) {
-          this.$.fromCalendar.fromMoment = today.clone();
-          this.$.toCalendar.fromMoment = today.clone();
-          this.set('fromMoment', this._preserveTime(this.fromMoment, today.clone()));
-        }
-      }
-
-      //check if this preset end date is allowed
-      if(endOk) {
-        this.$.fromCalendar.toMoment = end.clone();
-        this.$.toCalendar.toMoment = end.clone();
-        this.set('toMoment', end.clone());
-      } else {
-        //end date is not ok but start is, it means we're blocking future date. Set end date to today
-        if(startOk) {
-          this.$.fromCalendar.toMoment = today.clone();
-          this.$.toCalendar.toMoment = today.clone();
-          this.set('toMoment', this._preserveTime(this.toMoment, today.clone()));
-        }
+        this.$.fromCalendar.toMoment = validity.end.clone();
+        this.$.toCalendar.toMoment = validity.end.clone();
+        this.set('toMoment', validity.preserveEndTime ? this._preserveTime(this.toMoment, validity.end.clone()) : validity.end.clone());
       }
 
       this._internalSet = false;
+    },
+
+    /**
+     * Validates a preset start date based on blockPastDate/blockFutureDate/minDate/maxDate
+     */
+    _validatePresetDates: function(start, end) {
+
+      var today = Px.moment.tz(Px.moment(), this.timeZone),
+          result = {
+            start: null,
+            end: null,
+            preserveStartTime: false,
+            preserveEndTime: false
+          },
+          startValid = this._validateDateBlock(start, today),
+          endValid = this._validateDateBlock(end, today);
+
+      if(!startValid.blockFutureValid || !startValid.blockMaxValid || !endValid.blockMinValid || !endValid.blockPastValid) {
+        //in this scenarios we know the whole range will be wrong
+        //so don't apply anything
+        return null;
+      }
+
+      if(!startValid.blockPastValid && !startValid.blockMinValid) {
+
+        //both block past date and min date are invalid, pick the
+        //latest one
+        result.start = today.isAfter(this.minDate) ? today : this.minDate;
+      } else if(!startValid.blockPastValid) {
+
+        //we select today, but effectively only used 'day' as the
+        //granularity. Make sure we preserve time then
+        result.start = today;
+        result.preserveStartTime = true;
+      } else if(!startValid.blockMinValid) {
+        result.start = this.minDate;
+      } else {
+        result.start = start;
+      }
+
+      if(!endValid.blockFutureValid && !endValid.blockMaxValid) {
+
+        //both future past date and max date are invalid, pick the
+        //earliest one
+        result.end = today.isBefore(this.maxDate) ? today : this.maxDate;
+      } else if(!endValid.blockFutureValid) {
+
+        //we select today, but effectively only used 'day' as the
+        //granularity. Make sure we preserve time then
+        result.end = today;
+        result.preserveEndTime = true;
+      } else if(!endValid.blockMaxValid) {
+        result.end = this.maxDate;
+      } else {
+        result.end = end;
+      }
+
+      return result;
+    },
+
+    /**
+     * Validates a date against blockPastDate/blockFutureDate/minDate/maxDate
+     */
+    _validateDateBlock: function(date, today) {
+      return {
+        blockFutureValid: !this.blockFutureDates || start.isSameOrBefore(today, 'day'),
+        blockPastValid: !this.blockPastDates || start.isSameOrAfter(today, 'day'),
+        blockMinValid: !this.minDate || start.isAfter(this.minDate),
+        blockMaxValid: !this.maxDate || start.isBefore(this.maxDate)
+      };
     },
 
     _resetRange: function(rangeObject) {
