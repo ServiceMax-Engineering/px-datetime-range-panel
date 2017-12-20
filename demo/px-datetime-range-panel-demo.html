@@ -43,6 +43,10 @@
 
       <!-- Component ---------------------------------------------------------->
       <px-demo-component slot="px-demo-component">
+          <p class=u-mb0>Events fired: <strong>from-moment-changed</strong> and <strong>to-moment-changed</strong></p>
+          <p class="zeta u-mt0">See API Reference below for more details</p>
+          <p class="u-mb++">Submitted range: <strong>{{props.fromMoment.value}}</strong> To: <strong>{{props.toMoment.value}}</strong></p>
+
         <div style="height: 430px; width: 630px;">
           <px-datetime-range-panel
             style="position: relative;"
