@@ -1,3 +1,7 @@
+v2.0.2
+===================
+* fix calendar dependency
+
 v2.0.1
 ==================
 * fix link in docs
