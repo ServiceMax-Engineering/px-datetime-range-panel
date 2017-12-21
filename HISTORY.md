@@ -1,3 +1,7 @@
+v2.0.1
+==================
+* fix link in docs
+
 v2.0.0
 ==================
 * Polymer 1.X/2.X hybrid support
