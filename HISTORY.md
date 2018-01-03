@@ -1,3 +1,7 @@
+v2.1.0
+===================
+* updated `position: absolute` to `position: static` for rangepicker's iron-dropdown
+
 v2.0.2
 ===================
 * fix calendar dependency
