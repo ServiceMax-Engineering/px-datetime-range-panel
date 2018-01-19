@@ -1,3 +1,7 @@
+v2.1.1
+===================
+* added `sudo:required` to travis
+
 v2.1.0
 ===================
 * updated `position: absolute` to `position: static` for rangepicker's iron-dropdown
