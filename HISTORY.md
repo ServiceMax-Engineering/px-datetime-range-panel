@@ -1,3 +1,7 @@
+v2.1.2
+==================
+* Updated to newest px-datetime-common behavior versions
+
 v2.1.1
 ===================
 * added `sudo:required` to travis
