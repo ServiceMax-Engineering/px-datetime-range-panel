@@ -14,8 +14,8 @@ The datetime components rely on [Moment.js](https://momentjs.com/) and [Moment T
 ### Usage
 
     <px-datetime-range-panel
-      from={{...}}
-      to={{...}}>
+      from-moment={{...}}
+      to-moment={{...}}>
     </px-datetime-range-panel>
 
 
@@ -110,7 +110,7 @@ Custom property | Description
                     max-date="[[maxDate]]">
                   </px-datetime-field>
                 </div>
-          </template>
+              </template>
             </div>
           </div>
         </div>
@@ -151,35 +151,21 @@ Custom property | Description
     properties: {
 
       /**
-       * (optional)
-       *
        * Reflects the date currently used by the 'from' calendar to determine what it should
-       * be showing, i.e what month, year or year range. ISO8601 string
-       *
-       * @default 1 month before now
+       * be showing, i.e what month, year or year range.
        */
       fromBaseDate: {
         type: Object,
         notify: true,
-        // value: function() {
-        //   return Px.moment.tz(Px.moment(), this.timeZone).subtract(1,'months');
-        // },
         observer: '_fromBaseDateChanged'
       },
       /**
-       * (optional)
-       *
        * Reflects the date currently used by the 'to' calendar to determine what it should
-       * be showing, i.e what month, year or year range. ISO8601 string
-       *
-       * @default now
+       * be showing, i.e what month, year or year range.
        */
       toBaseDate: {
         type: Object,
         notify: true,
-        // value: function() {
-        //   return Px.moment.tz(Px.moment(), this.timeZone);
-        // },
         observer: '_toBaseDateChanged'
       },
       /**
@@ -190,16 +176,13 @@ Custom property | Description
         type: Boolean
       },
       /**
-       * (optional)
-       * If set the presets won't be shown
+       * Presets won't be shown
        */
       hidePresets: {
         type: Boolean,
         value: false
       },
       /**
-       * (optional)
-       *
        * The preset date/time ranges to be displayed.
        *
        *```
@@ -248,7 +231,7 @@ Custom property | Description
         }
       },
       /**
-       * Whether time should be shown
+       * Will prevent time from being displayed
        */
       hideTime: {
         type: Boolean,
@@ -299,7 +282,6 @@ Custom property | Description
       'px-datetime-button-clicked': '_handleButtonClick'
     },
     ready: function() {
-
       var fromHandler = this._fromPicked.bind(this),
           toHandler = this._toPicked.bind(this),
           presetHandler = this._presetSelected.bind(this);
@@ -307,20 +289,6 @@ Custom property | Description
       this.$.fromCalendar.addEventListener('px-date-selected', fromHandler);
       this.$.toCalendar.addEventListener('px-date-selected', toHandler);
       this.addEventListener('px-preset-selected', presetHandler);
-    },
-    _timeZoneChanged: function() {
-      if(this.fromBaseDate) {
-        this.set('fromBaseDate', Px.moment.tz(this.fromBaseDate, this.timeZone));
-      }
-      else {
-        this.set('fromBaseDate', Px.moment.tz(Px.moment().subtract(1, 'month'), this.timeZone));
-      }
-      if(this.toBaseDate) {
-        this.set('toBaseDate', Px.moment.tz(this.toBaseDate, this.timeZone));
-      }
-      else {
-        this.set('toBaseDate', Px.moment.tz(Px.moment(), this.timeZone));
-      }
     },
 
     _presetSelected: function(e) {
@@ -369,7 +337,6 @@ Custom property | Description
      * Validates a preset start date based on blockPastDate/blockFutureDate/minDate/maxDate
      */
     _validatePresetDates: function(start, end) {
-
       var today = Px.moment.tz(Px.moment(), this.timeZone),
           result = {
             start: null,
@@ -387,12 +354,10 @@ Custom property | Description
       }
 
       if(!startValid.blockPastValid && !startValid.blockMinValid) {
-
         //both block past date and min date are invalid, pick the
         //latest one
         result.start = today.isAfter(this.minDate) ? today : this.minDate;
       } else if(!startValid.blockPastValid) {
-
         //we select today, but effectively only used 'day' as the
         //granularity. Make sure we preserve time then
         result.start = today;
@@ -404,12 +369,10 @@ Custom property | Description
       }
 
       if(!endValid.blockFutureValid && !endValid.blockMaxValid) {
-
         //both future past date and max date are invalid, pick the
         //earliest one
         result.end = today.isBefore(this.maxDate) ? today : this.maxDate;
       } else if(!endValid.blockFutureValid) {
-
         //we select today, but effectively only used 'day' as the
         //granularity. Make sure we preserve time then
         result.end = today;
@@ -464,7 +427,7 @@ Custom property | Description
       } else {
 
         if(this.$.fromCalendar.toMoment) {
-          //range is picked solely on 'from' calendar
+        //range is picked solely on 'from' calendar
 
           //swap dates if needed
           if(event.detail.isBefore(this.fromMoment)) {
