@@ -1,3 +1,7 @@
+v2.2.0
+==================
+* added `canApply` property to allow outside input into `_canApply`
+
 v2.1.3
 ==================
 * cleaned up api

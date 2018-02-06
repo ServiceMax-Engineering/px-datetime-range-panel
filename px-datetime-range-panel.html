@@ -271,7 +271,14 @@ Custom property | Description
        */
       _canApply: {
         type: Boolean,
-        computed: '_canApplyComputed(timeIsValid, fromMoment, toMoment)'
+        computed: '_canApplyComputed(timeIsValid, fromMoment, toMoment, canApply)'
+      },
+      /**
+       * Outside variable to control `_canApply`
+       * Used in rangepicker to set `_canApply` to false
+       */
+      canApply: {
+        type: Boolean
       }
     },
     observers:[
@@ -550,8 +557,8 @@ Custom property | Description
     /**
      * can apply if range is in the right order and times are valid (or not shown)
      */
-    _canApplyComputed: function(timeIsValid, fromMoment, toMoment) {
-      return this._validateRangeOrder(fromMoment, toMoment) && timeIsValid;
+    _canApplyComputed: function(timeIsValid, fromMoment, toMoment, canApply) {
+      return this._validateRangeOrder(fromMoment, toMoment) && timeIsValid && canApply;
     },
 
     _getTimeIsValid: function(_fromTimeIsValid, _toTimeIsValid, hideTime) {
