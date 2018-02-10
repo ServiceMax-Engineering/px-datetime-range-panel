@@ -1,3 +1,7 @@
+v2.2.1
+==================
+* fixing demo pages for IE11
+
 v2.2.0
 ==================
 * added `allowApply` property to allow outside input into `_canApply`
