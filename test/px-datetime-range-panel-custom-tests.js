@@ -43,6 +43,47 @@ suite('Calendars base dates', function() {
     });
   });
 
+  test('next arrow does not change toMoment', function(done) {
+
+    rangePanel.fromMoment = Px.moment("2016-06-01T20:00:00Z");
+    rangePanel.toMoment = Px.moment("2016-07-11T22:00:00Z");
+
+    flush(function() {
+      var toCalendar = Polymer.dom(rangePanel.root).querySelector('#toCalendar'),
+          nextButton = Polymer.dom(toCalendar.root).querySelector('#btnNextMonth');
+
+      nextButton.click();
+
+      flush(function() {
+        assert.equal(toCalendar.baseDate.toISOString(), "2016-08-11T22:00:00.000Z", "toCalendar baseDate");
+        assert.equal(toCalendar.toMoment.toISOString(), "2016-07-11T22:00:00.000Z", "toCalendar toMoment");
+        assert.equal(rangePanel.toMoment.toISOString(), "2016-07-11T22:00:00.000Z", "rangePanel  toMoment");
+        done();
+      });
+    });
+  });
+
+  test('previous arrow does not change fromMoment', function(done) {
+
+    rangePanel.fromMoment = Px.moment("2016-06-01T20:00:00Z");
+    rangePanel.toMoment = Px.moment("2016-07-11T22:00:00Z");
+
+    flush(function() {
+      var fromCalendar = Polymer.dom(rangePanel.root).querySelector('#fromCalendar'),
+          fromCalendarButtons = Polymer.dom(fromCalendar.root).querySelectorAll('button'),
+          previousButton = fromCalendarButtons[0];
+
+      previousButton.click();
+
+      flush(function() {
+        assert.equal(fromCalendar.baseDate.toISOString(), "2016-05-01T20:00:00.000Z", "fromCalendar baseDate");
+        assert.equal(fromCalendar.fromMoment.toISOString(), "2016-06-01T20:00:00.000Z", "fromCalendar fromMoment");
+        assert.equal(rangePanel.fromMoment.toISOString(), "2016-06-01T20:00:00.000Z", "rangePanel  fromMoment");
+        done();
+      });
+    });
+  });
+
   test('"to" calendar cant be same as "from" calendar', function(done) {
 
     rangePanel.toBaseDate = Px.moment("2016-06-11T22:00:00Z");

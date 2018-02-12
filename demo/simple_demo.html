@@ -9,19 +9,36 @@
     <link rel="import" href="../../px-theme/px-theme-styles.html">
     <link rel="import" href="../px-datetime-range-panel.html" />
 
-  </head>
+<custom-style>
+  <style include="px-theme-styles" is="custom-style"></style>
+</custom-style>
+</head>
 
-  <body>
-    <custom-style>
-      <style include="px-theme-styles" is="custom-style"></style>
-    </custom-style>
-
-    <h2>px-datetime-range-panel</h2>
+<body>
+<dom-bind>
+  <template is="dom-bind">
     <px-datetime-range-panel
-      time-format="hh:mm:ss a"
-      time-zone="UTC"
-      show-buttons>
+    time-format="hh:mm:ss a"
+    time-zone="UTC"
+    show-buttons
+    from-moment="{{fromMoment}}"
+    to-moment="{{toMoment}}">
     </px-datetime-range-panel>
-  </body>
+  </template>
+</dom-bind>
+<script>
+  window.addEventListener('WebComponentsReady', function () {
+    var template = document.querySelector('template[is=dom-bind]');
+    template.fromMoment = Px.moment("2018-01-20");
+    template.toMoment = Px.moment("2018-02-1");
+
+    // Support hybrid mode
+    var templatev1 = document.querySelector('dom-bind');
+    templatev1.fromMoment = template.fromMoment;
+    templatev1.toMoment = template.toMoment;
+  });
+</script>
+</body>
+
 </html>
 

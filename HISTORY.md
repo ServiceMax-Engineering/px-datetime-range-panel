@@ -1,3 +1,7 @@
+v2.2.2
+==================
+* added test for the reference bug between baseDate and the moment objs
+
 v2.2.1
 ==================
 * fixing demo pages for IE11
