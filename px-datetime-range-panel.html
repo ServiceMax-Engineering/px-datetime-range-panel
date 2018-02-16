@@ -264,6 +264,7 @@ Custom property | Description
        */
       timeIsValid: {
         type: Boolean,
+        notify: true,
         computed: '_getTimeIsValid(_fromTimeIsValid, _toTimeIsValid, hideTime)'
       },
       /**

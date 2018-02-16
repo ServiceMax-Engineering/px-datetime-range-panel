@@ -1,3 +1,7 @@
+v2.2.3
+==================
+* Added notify on timeIsValid
+
 v2.2.2
 ==================
 * added test for the reference bug between baseDate and the moment objs
