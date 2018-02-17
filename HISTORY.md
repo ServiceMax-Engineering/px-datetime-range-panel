@@ -1,3 +1,7 @@
+v2.3.0
+==================
+* Update z-index
+
 v2.2.3
 ==================
 * Added notify on timeIsValid
