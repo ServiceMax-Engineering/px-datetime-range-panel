@@ -58,7 +58,7 @@ Custom property | Description
                 max-date="[[maxDate]]">
               </px-calendar-picker>
               <template is="dom-if" if="{{!hideTime}}">
-                <div class="flex flex--center u-mt+">
+                <div class="flex flex--center u-mt--">
                   <px-datetime-field
                     id="time"
                     class="box__time"
@@ -93,7 +93,7 @@ Custom property | Description
                 max-date="[[maxDate]]">
               </px-calendar-picker>
               <template is="dom-if" if="{{!hideTime}}">
-                <div class$="flex flex--center u-mt+ {{_getFieldClass(showButtons)}}">
+                <div class$="flex flex--center u-mt-- {{_getFieldClass(showButtons)}}">
                   <px-datetime-field
                     id="time"
                     class="box__time"
@@ -117,7 +117,7 @@ Custom property | Description
         <template is="dom-if" if="{{!hidePresets}}">
           <px-datetime-presets
             id="presets"
-            class="flex flex--col u-ml+++ u-mr-"
+            class="flex flex--col u-ml+ u-mr-"
             preset-ranges="{{presetRanges}}"
             resources="[[resources]]"
             language="[[language]]"
@@ -126,7 +126,7 @@ Custom property | Description
         </template>
       </div>
       <template is="dom-if" if="{{showButtons}}">
-        <div class="flex flex--row--rev u-mt+++">
+        <div class="flex flex--row--rev u-mt+">
           <px-datetime-buttons
             is-submit-button-valid="[[_canApply]]"
             resources="[[resources]]"

@@ -1,3 +1,7 @@
+v2.3.1
+==================
+* Fixed vertical paddind and display issue
+
 v2.3.0
 ==================
 * Update z-index
