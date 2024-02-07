@@ -1,3 +1,8 @@
+v2.3.2
+==================
+* Set both From and To to this date, when time is not enabled and only one date is selected on the Calendar Panel.
+* Set the left calendar as the month selected from From
+
 v2.3.1
 ==================
 * Fixed vertical paddind and display issue
