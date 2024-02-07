@@ -453,6 +453,9 @@ Custom property | Description
       //nothing selected, assume it's going to be the start date
       if(this.$.fromCalendar.toMoment === null && this.$.toCalendar.toMoment === null && this.$.toCalendar.fromMoment === null) {
         this.set('fromMoment', this._preserveTime(this.fromMoment, event.detail));
+        if(this.hideTime) {
+          this.set('toMoment', this._preserveTime(this.toMoment, event.detail));
+        }
       } else {
 
         if(this.$.fromCalendar.toMoment) {
@@ -495,6 +498,9 @@ Custom property | Description
       //nothing selected, assume it's going to be the end date
       if(!this.$.fromCalendar.toMoment && !this.$.toCalendar.toMoment && !this.$.fromCalendar.fromMoment) {
         this.set('toMoment', this._preserveTime(this.toMoment, event.detail));
+        if(this.hideTime) {
+          this.set('fromMoment', this._preserveTime(this.fromMoment, event.detail));
+        }
       } else {
         if(this.$.toCalendar.toMoment) {
           //range is picked solely on 'to' calendar
@@ -535,7 +541,7 @@ Custom property | Description
       //make sure the new base date is at least the month before 'to'
       if(this.fromBaseDate === null) {return}
       if(!this._internalSet && this.fromBaseDate && this.toBaseDate && this.fromBaseDate.isSameOrAfter(this.toBaseDate, 'month')) {
-        this.set('fromBaseDate', Px.moment.tz(this.toBaseDate, this.timeZone).subtract(1, 'month'));
+        this.set('toBaseDate', Px.moment.tz(this.fromBaseDate, this.timeZone).add(1, 'month'));
       }
 
       //don't allow the 'to' calendar to choose dates before 1 month after 'from' calendar
